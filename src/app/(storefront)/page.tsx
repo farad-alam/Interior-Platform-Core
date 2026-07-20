@@ -50,122 +50,103 @@ export default async function StorefrontPage() {
     <div className="flex flex-col w-full" style={{ background: 'var(--sf-cream)' }}>
 
       {/* ══════════════════════════════════════════
-          1. HERO — SPLIT LAYOUT
+          1. HERO — FULL BACKGROUND IMAGE
       ══════════════════════════════════════════ */}
-      <section className="relative min-h-screen w-full flex items-stretch overflow-hidden">
-        {/* Left Content Panel */}
-        <div
-          className="relative z-10 flex flex-col justify-center px-8 md:px-16 lg:px-24 pt-28 pb-16 w-full md:w-1/2"
-          style={{ background: 'var(--sf-cream)' }}
-        >
+      <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <Image
+          src={settings?.heroImage || 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2070&auto=format&fit=crop'}
+          alt="Aluminum Kitchen"
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Dark Overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1A2421]/80 via-[#1A2421]/60 to-[#1A2421]/90" />
+
+        {/* Content Container */}
+        <div className="relative z-10 container mx-auto px-6 md:px-12 flex flex-col items-center text-center mt-20">
+          
           {/* Label */}
-          <div className="flex items-center gap-3 mb-6">
-            <span className="sf-label" style={{ color: 'var(--sf-brown)' }}>
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <span className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest" style={{ background: 'rgba(212,184,150,0.2)', color: '#D4B896', border: '1px solid rgba(212,184,150,0.3)' }}>
               {isAr ? 'خدمات مطابخ الألمنيوم' : 'Aluminum Kitchen Services'}
             </span>
           </div>
 
           {/* Main Headline */}
           <h1
-            className="font-playfair font-bold leading-tight mb-6"
-            style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)', color: 'var(--sf-charcoal)', lineHeight: 1.1 }}
+            className="font-playfair font-bold leading-tight mb-8 max-w-4xl"
+            style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', color: '#F5F0E8', lineHeight: 1.15 }}
           >
-            {isAr ? (
-              <>
-                {restWords}{' '}
-                <em style={{ fontStyle: 'italic', color: 'var(--sf-green)' }}>{lastWord}</em>
-              </>
-            ) : (
-              <>
-                {restWords}{' '}
-                <em style={{ fontStyle: 'italic', color: 'var(--sf-green)' }}>{lastWord}</em>
-              </>
-            )}
+            {restWords}{' '}
+            <em style={{ fontStyle: 'italic', color: '#D4B896' }}>{lastWord}</em>
           </h1>
 
           {/* Subheadline */}
           <p
-            className="mb-10 max-w-sm leading-relaxed"
-            style={{ fontSize: '1rem', color: 'var(--sf-warm-gray)', lineHeight: 1.7 }}
+            className="mb-12 max-w-2xl leading-relaxed"
+            style={{ fontSize: '1.1rem', color: 'rgba(245,240,232,0.8)', lineHeight: 1.8 }}
           >
             {heroSub || defaultSub}
           </p>
 
           {/* CTA Buttons */}
-          <div className={`flex flex-col sm:flex-row gap-3 mb-12 ${isAr ? 'sm:flex-row-reverse' : ''}`}>
+          <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 ${isAr ? 'sm:flex-row-reverse' : ''}`}>
             {wpClean && (
               <a
                 href={`https://wa.me/${wpClean}?text=${encodeURIComponent(isAr ? 'مرحباً، أود الاستفسار عن خدمات المطابخ' : 'Hello, I want to inquire about kitchen services')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
-                  background: 'var(--sf-green)', color: '#F5F0E8',
-                  padding: '0.9rem 2rem', borderRadius: '9999px',
-                  fontWeight: 600, fontSize: '0.875rem', letterSpacing: '0.04em',
-                  transition: 'all 0.2s', whiteSpace: 'nowrap'
-                }}
+                className="flex items-center justify-center gap-2 py-4 px-8 rounded-full text-sm font-semibold transition-all duration-300 hover:scale-105"
+                style={{ background: 'var(--sf-green)', color: '#F5F0E8', border: '1.5px solid var(--sf-green)' }}
               >
-                <MessageCircle className="h-4 w-4" />
+                <MessageCircle className="h-5 w-5" />
                 {isAr ? 'تواصل عبر واتساب' : 'Request Free Quote'}
-                <ArrowRight className="h-4 w-4" />
               </a>
             )}
             <a
               href="#services"
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
-                background: 'transparent', color: 'var(--sf-green)',
-                padding: '0.9rem 2rem', borderRadius: '9999px',
-                fontWeight: 600, fontSize: '0.875rem', letterSpacing: '0.04em',
-                border: '1.5px solid var(--sf-green)', transition: 'all 0.2s'
-              }}
+              className="flex items-center justify-center gap-2 py-4 px-8 rounded-full text-sm font-semibold transition-all duration-300 hover:bg-[#F5F0E8] hover:text-[#1A2421]"
+              style={{ background: 'transparent', color: '#F5F0E8', border: '1.5px solid rgba(245,240,232,0.5)' }}
             >
               {isAr ? 'استكشف خدماتنا' : 'Explore Services'}
             </a>
           </div>
 
-          {/* Location badge */}
-          <div className="flex items-center gap-2" style={{ color: 'var(--sf-warm-gray)', fontSize: '0.8rem' }}>
-            <MapPin className="h-4 w-4" style={{ color: 'var(--sf-brown)' }} />
-            {isAr ? 'نخدم جميع أحياء الرياض، المملكة العربية السعودية' : 'Serving all Riyadh neighborhoods, Saudi Arabia'}
-          </div>
         </div>
 
-        {/* Right Image Panel */}
-        <div className="hidden md:block w-1/2 relative">
-          <Image
-            src={settings?.heroImage || 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80'}
-            alt="Aluminum Kitchen"
-            fill
-            className="object-cover"
-            priority
-          />
-          {/* Subtle gradient overlay at bottom */}
-          <div
-            className="absolute inset-0"
-            style={{ background: 'linear-gradient(to bottom, transparent 60%, rgba(44,59,45,0.15))' }}
-          />
-          {/* Stats pill floating on image */}
-          {stats.length > 0 && (
-            <div
-              className="absolute bottom-8 left-8 right-8 rounded-2xl p-5 grid grid-cols-2 gap-4"
-              style={{ background: 'rgba(245,240,232,0.92)', backdropFilter: 'blur(12px)', border: '1px solid rgba(212,184,150,0.4)' }}
-            >
-              {stats.slice(0, 4).map(stat => (
-                <div key={stat.id} className="text-center">
-                  <div className="font-playfair font-bold text-2xl" style={{ color: 'var(--sf-green)' }}>
-                    {isAr ? (stat.valueAr || stat.value) : stat.value}
+        {/* Floating Stats Strip at the bottom of the hero */}
+        {stats.length > 0 && (
+          <div className="absolute bottom-0 left-0 right-0 z-20">
+            <div className="container mx-auto px-6 max-w-6xl translate-y-1/2">
+              <div
+                className="rounded-3xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6"
+                style={{ 
+                  background: 'rgba(245,240,232,0.95)', 
+                  backdropFilter: 'blur(16px)', 
+                  boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+                  border: '1px solid rgba(212,184,150,0.3)'
+                }}
+              >
+                {stats.slice(0, 4).map(stat => (
+                  <div key={stat.id} className="text-center flex flex-col items-center">
+                    <div className="font-playfair font-bold text-3xl mb-1" style={{ color: 'var(--sf-green)' }}>
+                      {isAr ? (stat.valueAr || stat.value) : stat.value}
+                    </div>
+                    <div className="text-xs font-bold uppercase tracking-widest mt-1" style={{ color: 'var(--sf-brown)' }}>
+                      {isAr ? (stat.labelAr || stat.label) : stat.label}
+                    </div>
                   </div>
-                  <div className="text-xs font-medium mt-0.5" style={{ color: 'var(--sf-warm-gray)' }}>
-                    {isAr ? (stat.labelAr || stat.label) : stat.label}
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </section>
+
+      {/* Spacer to account for the floating stats strip overlapping the next section */}
+      <div className="h-24 md:h-16" style={{ background: 'var(--sf-cream)' }} />
 
       {/* ══════════════════════════════════════════
           2. TRUST FEATURES — Floating card strip
