@@ -5,10 +5,11 @@ const globalForCloudinary = globalThis as unknown as { cloudinary: typeof cloudi
 
 export const cloudinaryConfig = globalForCloudinary.cloudinary || cloudinary
 
-if (process.env.CLOUDINARY_URL) {
-  cloudinaryConfig.config({
-    secure: true,
-  })
-}
+cloudinaryConfig.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+})
 
 if (process.env.NODE_ENV !== 'production') globalForCloudinary.cloudinary = cloudinaryConfig

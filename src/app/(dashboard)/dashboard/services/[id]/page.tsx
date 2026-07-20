@@ -4,8 +4,9 @@ import { notFound } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
-export default async function EditServicePage({ params }: { params: { id: string } }) {
-  const service = await getServiceById(params.id)
+export default async function EditServicePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const service = await getServiceById(id)
 
   if (!service) {
     notFound()

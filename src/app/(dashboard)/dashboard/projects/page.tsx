@@ -3,7 +3,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { Plus, Edit, Trash2 } from 'lucide-react'
+import { Plus, Edit } from 'lucide-react'
+import { DeleteButton } from '@/dashboard/components/DeleteButton'
+import { deleteProjectAction } from '@/core/actions/project.actions'
 
 export const dynamic = 'force-dynamic'
 
@@ -59,9 +61,7 @@ export default async function ProjectsPage() {
                     <Link href={`/dashboard/projects/${project.id}`} className={buttonVariants({ variant: 'outline', size: 'icon' })}>
                       <Edit className="h-4 w-4" />
                     </Link>
-                    <Button variant="destructive" size="icon">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <DeleteButton id={project.id} action={deleteProjectAction} />
                   </TableCell>
                 </TableRow>
               ))
