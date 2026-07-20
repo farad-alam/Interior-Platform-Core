@@ -9,9 +9,9 @@ import { ClientGallery } from '@/components/storefront/ClientGallery'
 
 export const dynamic = 'force-dynamic'
 
-const DynamicIcon = ({ name, className }: { name: string; className?: string }) => {
+const DynamicIcon = ({ name, className, style }: { name: string; className?: string; style?: React.CSSProperties }) => {
   const Icon = (LucideIcons as any)[name] || LucideIcons.CheckCircle
-  return <Icon className={className} />
+  return <Icon className={className} style={style} />
 }
 
 export default async function StorefrontPage() {
