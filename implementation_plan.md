@@ -1,32 +1,36 @@
-# Agency Platform Core - Dashboard Overhaul
+# Phase 7: Demo Data, Testing, and UX Polish
 
-Based on the screenshot you shared, the Dashboard's global styling broke (falling back to Times New Roman) and the sidebar looks a bit chaotic. I will overhaul the dashboard to make it look incredibly clean, professional, and responsive. 
+This plan covers generating realistic demo data, establishing a strict testing protocol for the dashboard, and implementing skeleton loading states for a seamless UX.
 
-## Proposed Changes
+## 1. Demo Data Generation (`prisma/seed-demo.ts`)
+I will create a comprehensive seed script that populates the database with high-quality, realistic interior design data so the frontend looks stunning immediately.
+- **Categories**: "Residential", "Commercial", "Hospitality", "Minimalist".
+- **Services**: 4 premium services (e.g., "Full-Service Interior Design", "3D Rendering") complete with bullet-point features.
+- **Projects**: 6-8 high-end projects using beautiful placeholder imagery (via direct Unsplash URLs), with varied statuses (`PUBLISHED`, `DRAFT`) and `featured` flags.
+- **Site Settings**: Populate the global settings with dummy agency contact info.
 
-### 1. Fix Global Typography & Resets
-- **Bug Fix**: The `--font-sans` variable in `globals.css` is misconfigured in Tailwind v4. I will point it to the correct Next.js font variable (`--font-geist-sans` or `Inter`). This will instantly fix the "Times New Roman" issue across the entire dashboard.
-- **Backgrounds**: Set a very subtle off-white/gray background for the dashboard (`bg-muted/30`) so the white Cards pop perfectly.
+## 2. Dashboard Testing Protocol
+I will create and execute an automated test script (`test-dashboard-crud.ts`) that will interact directly with our Next.js Server Actions to ensure every piece of the dashboard's data layer works perfectly. 
+The test plan will verify:
+- **Projects**: Can we create, read, update, and delete a Project? Does slug generation work?
+- **Services**: Can we create, read, update, and delete a Service (including the dynamic features array)?
+- **Categories**: Can we create and delete Categories?
+- **Settings**: Can we update global site settings?
+*(I will run this script myself and verify the database outputs).*
 
-### 2. Premium Sidebar (`AppSidebar.tsx`)
-- Enhance the sidebar to feel like a modern SaaS product (e.g. Vercel or Stripe).
-- Add a sleek "StudioCore" logo area at the top.
-- Fix the icon alignment so they sit perfectly inline with the menu text.
-- Add distinct hover and active states (highlighting the page you are currently on).
-- Add a "Logout" button at the bottom of the sidebar.
-
-### 3. Responsive Form Layouts
-- The CRUD forms (like the "New Project" form in your screenshot) are currently stretching across the entire width of the screen on desktop.
-- I will constrain them to a readable width (e.g., `max-w-5xl mx-auto`) and center them.
-- I'll add subtle padding and shadows to the Cards to make the inputs feel more contained and structured.
-
-### 4. Header & Breadcrumbs (`AppHeader.tsx`)
-- Enhance the top header. Alongside the Sidebar Trigger (for mobile), I will add breadcrumb navigation (e.g., `Dashboard > Projects > New`) or a dynamic page title so you always know where you are.
+## 3. Loading & Skeleton Screens
+Server Components can sometimes take a moment to fetch data from the database. I will implement Next.js `loading.tsx` files across the dashboard using the Shadcn `<Skeleton />` component.
+- `dashboard/projects/loading.tsx` (Table skeleton)
+- `dashboard/services/loading.tsx` (Table skeleton)
+- `dashboard/categories/loading.tsx` (Split-view skeleton)
+- `dashboard/media/loading.tsx` (Grid skeleton)
 
 ## User Review Required
 
-Does this plan for cleaning up the dashboard sound good? I will make it look like a state-of-the-art SaaS interface!
+> [!NOTE]
+> The demo data script will **clear existing projects and categories** to ensure a clean state. Since this is a brand new database, this should be fine, but please confirm you are okay with wiping any manual test data you just entered!
 
 ## Verification Plan
-- Run `npm run dev` and navigate to `/dashboard` to visually verify the fonts, sidebar layout, and form constraints.
-- Test resizing the window to ensure the sidebar collapses properly on mobile and the forms remain readable.
+1. Run `npx tsx prisma/seed-demo.ts` and verify the storefront immediately populates with luxury content.
+2. Run `npx tsx test-dashboard-crud.ts` and verify all CRUD operations pass perfectly.
+3. Build the project and navigate the dashboard to visually verify the Skeleton loading states.
