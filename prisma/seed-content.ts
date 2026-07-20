@@ -30,6 +30,7 @@ async function main() {
     heroHeadlineAr: 'خبراء صيانة وتركيب وفك مطابخ الألمنيوم في الرياض',
     heroSubheadline: 'Professional dismantling, installation & maintenance of aluminum kitchens across all Riyadh neighborhoods. Fast, reliable, and guaranteed quality.',
     heroSubheadlineAr: 'خدمات احترافية في فك وتركيب وصيانة مطابخ الألمنيوم في جميع أحياء الرياض. سرعة في التنفيذ وجودة مضمونة.',
+    heroImage: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2070&auto=format&fit=crop',
     workingHours: 'Sat–Thu: 7:00 AM – 10:00 PM',
     workingHoursAr: 'السبت – الخميس: ٧:٠٠ ص – ١٠:٠٠ م',
     serviceAreas: 'All Riyadh Neighborhoods including Al Olaya, Al Malaz, Al Nakheel, Al Rawdah, and surrounding areas',
@@ -60,6 +61,7 @@ async function main() {
       description: 'We provide comprehensive maintenance for all types of aluminum kitchens. Whether it\'s a damaged door, broken hinge, worn-out rail, or misaligned cabinet — our skilled technicians restore your kitchen to perfect working condition quickly and efficiently.',
       descriptionAr: 'نقدم خدمات صيانة شاملة لجميع أنواع مطابخ الألمنيوم. سواء كان باباً تالفاً أو مفصلاً مكسوراً أو ريلاً بالياً أو خزانة غير محاذية — يعيد فنيونا المهرة مطبخك إلى حالته المثالية بسرعة وكفاءة.',
       icon: 'Wrench',
+      image: 'https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?q=80&w=1887&auto=format&fit=crop',
       features: [
         'Cabinet door repair & adjustment',
         'Hinge and handle replacement',
@@ -87,6 +89,7 @@ async function main() {
       description: 'Professional and careful dismantling of aluminum kitchens with zero damage to your walls or tiles. We dismantle and pack your entire kitchen ready for relocation, renovation, or replacement.',
       descriptionAr: 'فك احترافي وحذر لمطابخ الألمنيوم دون أي ضرر لجدرانك أو البلاط. نفك ونحزم مطبخك بالكامل استعداداً للانتقال أو التجديد أو الاستبدال.',
       icon: 'PackageOpen',
+      image: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=1964&auto=format&fit=crop',
       features: [
         'Complete kitchen unit dismantling',
         'Wall & tile protection during removal',
@@ -114,6 +117,7 @@ async function main() {
       description: 'Expert installation of new or relocated aluminum kitchens with precision and attention to detail. We ensure everything is perfectly aligned, securely fixed, and fully functional from day one.',
       descriptionAr: 'تركيب احترافي للمطابخ الألمنيوم الجديدة أو المنقولة بدقة واهتمام بالتفاصيل. نضمن أن كل شيء محاذٍ تماماً ومثبت بأمان ويعمل بشكل كامل منذ اليوم الأول.',
       icon: 'Construction',
+      image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop',
       features: [
         'Precise measurement & layout planning',
         'Full unit assembly & wall mounting',
@@ -224,6 +228,44 @@ async function main() {
     await prisma.testimonial.create({ data: t as any })
   }
   console.log(`  ✓ Created ${testimonials.length} Testimonials`)
+
+  // ─────────────────────────────────────────────
+  // 5.5 GALLERY ITEMS
+  // ─────────────────────────────────────────────
+  console.log('\n🖼️ Seeding Gallery Items...')
+  await prisma.galleryItem.deleteMany({})
+
+  const galleryItems = [
+    {
+      title: 'Modern Minimalist Kitchen', titleAr: 'مطبخ عصري بسيط',
+      caption: 'Complete aluminum kitchen installation with matte finish.', captionAr: 'تركيب مطبخ ألمنيوم بالكامل بتشطيب غير لامع.',
+      imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop',
+      serviceType: 'INSTALLATION', status: 'PUBLISHED',
+    },
+    {
+      title: 'Hinge & Hardware Replacement', titleAr: 'استبدال المفصلات والمقابض',
+      caption: 'Detailed maintenance of cabinet doors for smooth operation.', captionAr: 'صيانة مفصلة لأبواب الخزائن لضمان عملها بسلاسة.',
+      imageUrl: 'https://images.unsplash.com/photo-1556909212-d5b604d0c90d?q=80&w=2070&auto=format&fit=crop',
+      serviceType: 'MAINTENANCE', status: 'PUBLISHED',
+    },
+    {
+      title: 'Kitchen Dismantling Prep', titleAr: 'تحضير لفك المطبخ',
+      caption: 'Careful removal of kitchen units before a full home renovation.', captionAr: 'فك حذر لوحدات المطبخ قبل التجديد الكامل للمنزل.',
+      imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=2070&auto=format&fit=crop',
+      serviceType: 'DISMANTLING', status: 'PUBLISHED',
+    },
+    {
+      title: 'Premium Surface Restoration', titleAr: 'ترميم الأسطح الفاخرة',
+      caption: 'Restored aluminum counters and cabinets to look brand new.', captionAr: 'استعادة الأسطح والخزائن الألمنيوم لتبدو وكأنها جديدة.',
+      imageUrl: 'https://images.unsplash.com/photo-1556912167-f556f1f39fdf?q=80&w=2081&auto=format&fit=crop',
+      serviceType: 'MAINTENANCE', status: 'PUBLISHED',
+    },
+  ]
+
+  for (const item of galleryItems) {
+    await prisma.galleryItem.create({ data: item })
+  }
+  console.log(`  ✓ Created ${galleryItems.length} Gallery Items`)
 
   // ─────────────────────────────────────────────
   // 6. FAQs
