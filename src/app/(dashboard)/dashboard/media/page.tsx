@@ -1,6 +1,7 @@
 import { getMediaFiles } from '@/core/services/media.service'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import Image from 'next/image'
+import { Media } from '@prisma/client'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,7 +23,7 @@ export default async function MediaPage() {
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {mediaFiles.map((file) => (
+          {mediaFiles.map((file: Media) => (
             <Card key={file.id} className="overflow-hidden">
               <CardContent className="p-0 relative aspect-square">
                 <Image 
