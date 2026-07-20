@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { prisma } from '@/core/db/client'
 import { getLanguage } from '@/core/actions/language.actions'
-import { Phone, MapPin, Clock, MessageCircle } from 'lucide-react'
+import { Phone, MapPin, Clock, MessageCircle, ArrowRight } from 'lucide-react'
 
 export async function Footer() {
   const [settings, lang] = await Promise.all([
@@ -19,46 +19,62 @@ export async function Footer() {
   const wpClean = wp.replace(/\D/g, '')
 
   return (
-    <footer className="bg-muted/20 border-t border-border">
-      {/* CTA Strip */}
+    <footer style={{ background: 'var(--sf-charcoal)', color: '#F5F0E8' }}>
+      
+      {/* ══════════════════════════════════════════
+          FOOTER MAIN CTA STRIP (Deep Forest Green)
+      ══════════════════════════════════════════ */}
       {wp && (
-        <div className="bg-primary py-10 px-6">
-          <div className="container mx-auto max-w-4xl flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-start">
+        <div style={{ background: 'var(--sf-green)' }}>
+          <div className={`container mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-8 ${isAr ? 'md:flex-row-reverse text-right' : 'text-left'}`}>
             <div>
-              <h3 className="text-2xl font-bold text-primary-foreground mb-1">
-                {isAr ? 'هل تحتاج مساعدة في مطبخك؟' : 'Need help with your kitchen?'}
+              <h3 className="font-playfair text-2xl md:text-3xl font-bold mb-2">
+                {isAr ? 'جاهز لتجديد مطبخك؟' : 'Ready to upgrade your kitchen?'}
               </h3>
-              <p className="text-primary-foreground/80 text-sm">
-                {isAr ? 'تواصل معنا الآن للحصول على استشارة مجانية وعرض سعر.' : 'Contact us now for a free consultation and price quote.'}
+              <p style={{ color: 'rgba(245,240,232,0.8)' }}>
+                {isAr ? 'تواصل معنا الآن للحصول على استشارة مجانية.' : 'Contact us now for a free consultation.'}
               </p>
             </div>
             <a
               href={`https://wa.me/${wpClean}?text=${encodeURIComponent(isAr ? 'مرحباً، أريد الاستفسار عن خدماتكم.' : 'Hello, I would like to inquire about your services.')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-shrink-0 flex items-center gap-2 bg-white text-primary font-bold px-8 py-3 rounded-full hover:bg-white/90 transition-colors shadow-lg"
+              className="flex-shrink-0 flex items-center gap-3 font-semibold transition-transform hover:-translate-y-1"
+              style={{
+                background: '#F5F0E8',
+                color: 'var(--sf-green)',
+                padding: '0.9rem 2.5rem',
+                borderRadius: '9999px',
+                fontSize: '0.9rem',
+                letterSpacing: '0.04em'
+              }}
             >
               <MessageCircle className="h-5 w-5" />
               {isAr ? 'تواصل عبر واتساب' : 'Contact via WhatsApp'}
+              <ArrowRight className="h-4 w-4" />
             </a>
           </div>
         </div>
       )}
 
-      {/* Footer Grid */}
-      <div className="container mx-auto px-6 pt-16 pb-10 grid md:grid-cols-3 gap-12">
-        {/* Brand */}
-        <div>
-          <h2 className="font-playfair text-2xl font-bold tracking-wider mb-4">
-            {brandName || 'STUDIOCORE'}
+      {/* ══════════════════════════════════════════
+          FOOTER GRID
+      ══════════════════════════════════════════ */}
+      <div className={`container mx-auto px-6 pt-20 pb-16 grid md:grid-cols-12 gap-12 ${isAr ? 'text-right' : 'text-left'}`}>
+        
+        {/* Brand Info (takes up 4 cols) */}
+        <div className="md:col-span-5">
+          <h2 className="font-playfair text-3xl font-bold tracking-wider mb-6 text-white">
+            {brandName || 'KITCHEN PRO'}
           </h2>
-          <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+          <p className="text-sm leading-relaxed mb-8 max-w-sm" style={{ color: 'rgba(245,240,232,0.6)' }}>
             {tagline || (isAr ? 'شريكك الموثوق لحلول مطابخ الألمنيوم في الرياض.' : 'Your trusted partner for aluminum kitchen solutions in Riyadh.')}
           </p>
           {wp && (
             <a
               href={`tel:${settings?.phone}`}
-              className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
+              className="inline-flex items-center gap-3 hover:opacity-80 transition-opacity font-semibold"
+              style={{ color: '#D4B896' }}
             >
               <Phone className="h-4 w-4" />
               {settings?.phone || wp}
@@ -66,65 +82,71 @@ export async function Footer() {
           )}
         </div>
 
-        {/* Contact Info */}
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-widest mb-6 text-foreground">
-            {isAr ? 'تواصل معنا' : 'Contact'}
+        {/* Contact Info (takes up 4 cols) */}
+        <div className="md:col-span-4">
+          <h3 className="text-xs font-bold uppercase tracking-widest mb-8 text-white">
+            {isAr ? 'معلومات التواصل' : 'Contact Info'}
           </h3>
-          <ul className="space-y-4 text-sm text-muted-foreground">
+          <ul className="space-y-5 text-sm" style={{ color: 'rgba(245,240,232,0.6)' }}>
             {address && (
-              <li className="flex items-start gap-3">
-                <MapPin className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
+              <li className={`flex items-start gap-3 ${isAr ? 'flex-row-reverse' : ''}`}>
+                <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: '#D4B896' }} />
                 <span>{address}</span>
               </li>
             )}
             {workingHours && (
-              <li className="flex items-start gap-3">
-                <Clock className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
+              <li className={`flex items-start gap-3 ${isAr ? 'flex-row-reverse' : ''}`}>
+                <Clock className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: '#D4B896' }} />
                 <span>{workingHours}</span>
               </li>
             )}
-            {settings?.phone && (
-              <li className="flex items-start gap-3">
-                <Phone className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
-                <a href={`tel:${settings.phone}`} className="hover:text-foreground transition-colors">
-                  {settings.phone}
+            {settings?.email && (
+              <li className={`flex items-start gap-3 ${isAr ? 'flex-row-reverse' : ''}`}>
+                <span className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: '#D4B896' }}>@</span>
+                <a href={`mailto:${settings.email}`} className="hover:text-white transition-colors">
+                  {settings.email}
                 </a>
               </li>
             )}
           </ul>
         </div>
 
-        {/* Service Areas */}
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-widest mb-6 text-foreground">
+        {/* Quick Links / Areas (takes up 3 cols) */}
+        <div className="md:col-span-3">
+          <h3 className="text-xs font-bold uppercase tracking-widest mb-8 text-white">
             {isAr ? 'مناطق الخدمة' : 'Service Areas'}
           </h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            {serviceAreas || (isAr ? 'جميع أحياء الرياض' : 'All Riyadh Neighborhoods')}
+          <p className="text-sm leading-relaxed mb-8" style={{ color: 'rgba(245,240,232,0.6)' }}>
+            {serviceAreas || (isAr ? 'نغطي جميع أحياء الرياض' : 'Covering all Riyadh Neighborhoods')}
           </p>
-          <div className="mt-6 space-y-2">
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-foreground">
-              {isAr ? 'خدماتنا' : 'Our Services'}
-            </h4>
-            <ul className="space-y-1 text-sm text-muted-foreground">
-              <li><Link href="#services" className="hover:text-primary transition-colors">{isAr ? 'صيانة المطابخ' : 'Kitchen Maintenance'}</Link></li>
-              <li><Link href="#services" className="hover:text-primary transition-colors">{isAr ? 'فك المطابخ' : 'Kitchen Dismantling'}</Link></li>
-              <li><Link href="#services" className="hover:text-primary transition-colors">{isAr ? 'تركيب المطابخ' : 'Kitchen Installation'}</Link></li>
-            </ul>
+          
+          <h4 className="text-xs font-bold uppercase tracking-widest mb-4 text-white">
+            {isAr ? 'روابط سريعة' : 'Quick Links'}
+          </h4>
+          <ul className="space-y-3 text-sm" style={{ color: 'rgba(245,240,232,0.6)' }}>
+            <li><Link href="#services" className="hover:text-white transition-colors">{isAr ? 'خدماتنا' : 'Our Services'}</Link></li>
+            <li><Link href="#gallery" className="hover:text-white transition-colors">{isAr ? 'أعمالنا' : 'Portfolio'}</Link></li>
+            <li><Link href="#faq" className="hover:text-white transition-colors">{isAr ? 'الأسئلة الشائعة' : 'FAQ'}</Link></li>
+          </ul>
+        </div>
+
+      </div>
+
+      {/* ══════════════════════════════════════════
+          BOTTOM BAR
+      ══════════════════════════════════════════ */}
+      <div style={{ borderTop: '1px solid rgba(245,240,232,0.1)' }}>
+        <div className={`container mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs ${isAr ? 'md:flex-row-reverse' : ''}`} style={{ color: 'rgba(245,240,232,0.4)' }}>
+          <p>
+            &copy; {new Date().getFullYear()} {settings?.brandName || 'Aluminum Kitchen Maintenance'}. {isAr ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'}
+          </p>
+          <div className="flex gap-6">
+            <span className="hover:text-white transition-colors cursor-pointer">{isAr ? 'سياسة الخصوصية' : 'Privacy Policy'}</span>
+            <span className="hover:text-white transition-colors cursor-pointer">{isAr ? 'الشروط والأحكام' : 'Terms of Service'}</span>
           </div>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="container mx-auto px-6 py-6 border-t border-border flex flex-col md:flex-row items-center justify-between text-xs text-muted-foreground gap-2">
-        <p>
-          &copy; {new Date().getFullYear()} {settings?.brandName || 'Aluminum Kitchen Maintenance'}. {isAr ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'}
-        </p>
-        <p className="text-xs">
-          {isAr ? 'الرياض، المملكة العربية السعودية' : 'Riyadh, Saudi Arabia'}
-        </p>
-      </div>
     </footer>
   )
 }

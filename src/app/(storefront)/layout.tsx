@@ -13,8 +13,8 @@ export default async function StorefrontLayout({ children }: { children: React.R
   const lang = await getLanguage()
   
   return (
-    <div className={`min-h-screen bg-background text-foreground dark ${playfair.variable} ${inter.variable} font-sans`}>
-      <Navbar brandName={settings?.brandName} brandNameAr={settings?.brandNameAr} lang={lang} />
+    <div className={`min-h-screen bg-background text-foreground ${playfair.variable} ${inter.variable} font-sans`}>
+      <Navbar brandName={settings?.brandName} brandNameAr={settings?.brandNameAr} lang={lang} whatsapp={settings?.whatsapp} />
       <main>{children}</main>
       <Footer />
       <FloatingWhatsApp whatsappNumber={settings?.whatsapp || null} lang={lang} />

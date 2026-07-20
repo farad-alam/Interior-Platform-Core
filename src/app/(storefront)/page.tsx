@@ -3,14 +3,13 @@ import Link from 'next/link'
 import { prisma } from '@/core/db/client'
 import { getLanguage } from '@/core/actions/language.actions'
 import { getSiteSettings } from '@/core/services/settings.service'
-import { Phone, MessageCircle, MapPin, ChevronDown, Star } from 'lucide-react'
+import { MessageCircle, MapPin, ChevronDown, Star, ArrowRight, Phone } from 'lucide-react'
 import * as LucideIcons from 'lucide-react'
 import { ClientGallery } from '@/components/storefront/ClientGallery'
 
 export const dynamic = 'force-dynamic'
 
-// Helper to dynamically render a Lucide icon by name
-const DynamicIcon = ({ name, className }: { name: string, className?: string }) => {
+const DynamicIcon = ({ name, className }: { name: string; className?: string }) => {
   const Icon = (LucideIcons as any)[name] || LucideIcons.CheckCircle
   return <Icon className={className} />
 }
@@ -18,91 +17,190 @@ const DynamicIcon = ({ name, className }: { name: string, className?: string }) 
 export default async function StorefrontPage() {
   const lang = await getLanguage()
   const settings = await getSiteSettings()
-  
+
   const [services, trustFeatures, stats, faqs, testimonials, galleryItems] = await Promise.all([
     prisma.service.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } }),
     prisma.trustFeature.findMany({ orderBy: { order: 'asc' } }),
     prisma.statCounter.findMany({ orderBy: { order: 'asc' } }),
-    prisma.fAQ.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'desc' } }),
+    prisma.fAQ.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } }),
     prisma.testimonial.findMany({ where: { status: 'PUBLISHED', featured: true }, orderBy: { createdAt: 'desc' } }),
-    prisma.galleryItem.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'desc' } })
+    prisma.galleryItem.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'desc' } }),
   ])
 
   const isAr = lang === 'ar'
-
-  // Dynamic Content Accessors
   const heroHeadline = isAr ? settings?.heroHeadlineAr : settings?.heroHeadline
   const heroSub = isAr ? settings?.heroSubheadlineAr : settings?.heroSubheadline
   const wpNumber = settings?.whatsapp || ''
-  
-  const defaultHeadline = isAr ? 'خبراء صيانة وتركيب مطابخ الألمنيوم' : 'Expert Aluminum Kitchen Maintenance & Installation'
-  const defaultSub = isAr ? 'خدمات احترافية في جميع أنحاء الرياض. جودة مضمونة وسرعة في التنفيذ.' : 'Professional services across Riyadh. Guaranteed quality and fast execution.'
+  const wpClean = wpNumber.replace(/\D/g, '')
+
+  const defaultHeadline = isAr
+    ? 'خبراء صيانة وتركيب مطابخ الألمنيوم'
+    : 'Expert Aluminum Kitchen Services'
+  const defaultSub = isAr
+    ? 'خدمات احترافية في جميع أنحاء الرياض. جودة مضمونة وسرعة في التنفيذ.'
+    : 'Professional maintenance, dismantling & installation across all Riyadh neighborhoods.'
+
+  // Split headline for italic last word (design inspiration)
+  const headline = heroHeadline || defaultHeadline
+  const words = headline.split(' ')
+  const lastWord = words.pop()
+  const restWords = words.join(' ')
 
   return (
-    <div className="flex flex-col w-full">
-      {/* 1. HERO SECTION */}
-      <section className="relative min-h-[90vh] w-full flex items-center justify-center overflow-hidden pt-20">
-        <div className="absolute inset-0 z-0">
-          <Image 
-            src={settings?.heroImage || "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg"} 
-            alt="Aluminum Kitchen Maintenance" 
-            fill 
-            className="object-cover opacity-60 brightness-50"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"></div>
-        </div>
-        
-        <div className="relative z-10 text-center px-4 max-w-5xl mx-auto flex flex-col items-center mt-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm mb-8 font-medium">
-            <MapPin className="h-4 w-4 text-primary" />
-            {isAr ? 'نخدم جميع أحياء الرياض' : 'Serving all Riyadh neighborhoods'}
+    <div className="flex flex-col w-full" style={{ background: 'var(--sf-cream)' }}>
+
+      {/* ══════════════════════════════════════════
+          1. HERO — SPLIT LAYOUT
+      ══════════════════════════════════════════ */}
+      <section className="relative min-h-screen w-full flex items-stretch overflow-hidden">
+        {/* Left Content Panel */}
+        <div
+          className="relative z-10 flex flex-col justify-center px-8 md:px-16 lg:px-24 pt-28 pb-16 w-full md:w-1/2"
+          style={{ background: 'var(--sf-cream)' }}
+        >
+          {/* Label */}
+          <div className="flex items-center gap-3 mb-6">
+            <span className="sf-label" style={{ color: 'var(--sf-brown)' }}>
+              {isAr ? 'خدمات مطابخ الألمنيوم' : 'Aluminum Kitchen Services'}
+            </span>
           </div>
-          
-          <h1 className="font-playfair text-5xl md:text-7xl lg:text-8xl text-white font-bold mb-6 leading-tight drop-shadow-lg">
-            {heroHeadline || defaultHeadline}
+
+          {/* Main Headline */}
+          <h1
+            className="font-playfair font-bold leading-tight mb-6"
+            style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)', color: 'var(--sf-charcoal)', lineHeight: 1.1 }}
+          >
+            {isAr ? (
+              <>
+                {restWords}{' '}
+                <em style={{ fontStyle: 'italic', color: 'var(--sf-green)' }}>{lastWord}</em>
+              </>
+            ) : (
+              <>
+                {restWords}{' '}
+                <em style={{ fontStyle: 'italic', color: 'var(--sf-green)' }}>{lastWord}</em>
+              </>
+            )}
           </h1>
-          
-          <p className="text-xl md:text-2xl text-white/90 max-w-3xl font-medium mb-12 drop-shadow-md">
+
+          {/* Subheadline */}
+          <p
+            className="mb-10 max-w-sm leading-relaxed"
+            style={{ fontSize: '1rem', color: 'var(--sf-warm-gray)', lineHeight: 1.7 }}
+          >
             {heroSub || defaultSub}
           </p>
-          
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            <a 
-              href={`https://wa.me/${wpNumber.replace(/\D/g,'')}?text=${encodeURIComponent(isAr ? 'مرحباً، أود الاستفسار عن خدمات المطابخ' : 'Hello, I want to inquire about kitchen services')}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1ebd5a] text-white px-8 py-4 rounded-lg font-bold text-lg w-full sm:w-auto transition-transform hover:scale-105 shadow-lg shadow-green-900/20"
-            >
-              <MessageCircle className="h-6 w-6" />
-              {isAr ? 'تواصل معنا عبر واتساب' : 'Contact via WhatsApp'}
-            </a>
-            
-            {settings?.phone && (
-              <a 
-                href={`tel:${settings.phone.replace(/\D/g,'')}`}
-                className="flex items-center justify-center gap-3 bg-white hover:bg-gray-100 text-gray-900 px-8 py-4 rounded-lg font-bold text-lg w-full sm:w-auto transition-transform hover:scale-105 shadow-lg"
+
+          {/* CTA Buttons */}
+          <div className={`flex flex-col sm:flex-row gap-3 mb-12 ${isAr ? 'sm:flex-row-reverse' : ''}`}>
+            {wpClean && (
+              <a
+                href={`https://wa.me/${wpClean}?text=${encodeURIComponent(isAr ? 'مرحباً، أود الاستفسار عن خدمات المطابخ' : 'Hello, I want to inquire about kitchen services')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
+                  background: 'var(--sf-green)', color: '#F5F0E8',
+                  padding: '0.9rem 2rem', borderRadius: '9999px',
+                  fontWeight: 600, fontSize: '0.875rem', letterSpacing: '0.04em',
+                  transition: 'all 0.2s', whiteSpace: 'nowrap'
+                }}
               >
-                <Phone className="h-5 w-5" />
-                {isAr ? 'اتصل بنا الآن' : 'Call Us Now'}
+                <MessageCircle className="h-4 w-4" />
+                {isAr ? 'تواصل عبر واتساب' : 'Request Free Quote'}
+                <ArrowRight className="h-4 w-4" />
               </a>
             )}
+            <a
+              href="#services"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
+                background: 'transparent', color: 'var(--sf-green)',
+                padding: '0.9rem 2rem', borderRadius: '9999px',
+                fontWeight: 600, fontSize: '0.875rem', letterSpacing: '0.04em',
+                border: '1.5px solid var(--sf-green)', transition: 'all 0.2s'
+              }}
+            >
+              {isAr ? 'استكشف خدماتنا' : 'Explore Services'}
+            </a>
           </div>
+
+          {/* Location badge */}
+          <div className="flex items-center gap-2" style={{ color: 'var(--sf-warm-gray)', fontSize: '0.8rem' }}>
+            <MapPin className="h-4 w-4" style={{ color: 'var(--sf-brown)' }} />
+            {isAr ? 'نخدم جميع أحياء الرياض، المملكة العربية السعودية' : 'Serving all Riyadh neighborhoods, Saudi Arabia'}
+          </div>
+        </div>
+
+        {/* Right Image Panel */}
+        <div className="hidden md:block w-1/2 relative">
+          <Image
+            src={settings?.heroImage || 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80'}
+            alt="Aluminum Kitchen"
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* Subtle gradient overlay at bottom */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(to bottom, transparent 60%, rgba(44,59,45,0.15))' }}
+          />
+          {/* Stats pill floating on image */}
+          {stats.length > 0 && (
+            <div
+              className="absolute bottom-8 left-8 right-8 rounded-2xl p-5 grid grid-cols-2 gap-4"
+              style={{ background: 'rgba(245,240,232,0.92)', backdropFilter: 'blur(12px)', border: '1px solid rgba(212,184,150,0.4)' }}
+            >
+              {stats.slice(0, 4).map(stat => (
+                <div key={stat.id} className="text-center">
+                  <div className="font-playfair font-bold text-2xl" style={{ color: 'var(--sf-green)' }}>
+                    {isAr ? (stat.valueAr || stat.value) : stat.value}
+                  </div>
+                  <div className="text-xs font-medium mt-0.5" style={{ color: 'var(--sf-warm-gray)' }}>
+                    {isAr ? (stat.labelAr || stat.label) : stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* 2. WHY CHOOSE US (Trust Signals) */}
+      {/* ══════════════════════════════════════════
+          2. TRUST FEATURES — Floating card strip
+      ══════════════════════════════════════════ */}
       {trustFeatures.length > 0 && (
-        <section className="py-20 px-6 bg-muted">
+        <section className="px-6 py-4" style={{ background: 'var(--sf-cream)' }}>
           <div className="container mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {trustFeatures.map(feature => (
-                <div key={feature.id} className="bg-background p-8 rounded-2xl shadow-sm flex flex-col items-center text-center border border-border/50">
-                  <div className="h-16 w-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary">
-                    <DynamicIcon name={feature.icon || 'CheckCircle'} className="h-8 w-8" />
+            <div
+              className="rounded-3xl p-8 md:p-10 grid grid-cols-2 md:grid-cols-4 gap-6"
+              style={{ background: '#fff', boxShadow: '0 4px 40px rgba(44,59,45,0.07)', border: '1px solid rgba(212,184,150,0.3)' }}
+            >
+              {trustFeatures.slice(0, 4).map(feature => (
+                <div key={feature.id} className="flex flex-col items-center text-center gap-3">
+                  {/* Icon circle */}
+                  <div
+                    className="w-14 h-14 rounded-full flex items-center justify-center"
+                    style={{ background: 'var(--sf-cream)', border: '1.5px solid var(--sf-tan)' }}
+                  >
+                    <DynamicIcon
+                      name={feature.icon || 'CheckCircle'}
+                      className="h-6 w-6"
+                      style={{ color: 'var(--sf-green)' } as any}
+                    />
                   </div>
-                  <h3 className="text-xl font-bold mb-3">{isAr ? (feature.titleAr || feature.title) : feature.title}</h3>
-                  <p className="text-muted-foreground">{isAr ? (feature.descriptionAr || feature.description) : feature.description}</p>
+                  <div>
+                    <h3
+                      className="text-xs font-bold uppercase tracking-wider mb-1"
+                      style={{ color: 'var(--sf-charcoal)', letterSpacing: '0.12em' }}
+                    >
+                      {isAr ? (feature.titleAr || feature.title) : feature.title}
+                    </h3>
+                    <p className="text-xs leading-relaxed" style={{ color: 'var(--sf-warm-gray)' }}>
+                      {isAr ? (feature.descriptionAr || feature.description) : feature.description}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -110,54 +208,142 @@ export default async function StorefrontPage() {
         </section>
       )}
 
-      {/* 3. CORE SERVICES */}
-      <section id="services" className="py-24 px-6 bg-background">
+      {/* ══════════════════════════════════════════
+          3. SERVICES
+      ══════════════════════════════════════════ */}
+      <section id="services" className="py-24 px-6" style={{ background: 'var(--sf-cream)' }}>
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
-              {isAr ? 'خدماتنا' : 'Our Services'}
-            </h2>
-            <div className="h-1 w-20 bg-primary mx-auto rounded-full"></div>
+          {/* Section header */}
+          <div className={`flex items-start justify-between mb-14 flex-wrap gap-4 ${isAr ? 'flex-row-reverse' : ''}`}>
+            <div>
+              <span className="sf-label block mb-3" style={{ color: 'var(--sf-brown)' }}>
+                {isAr ? 'ما نقدمه' : 'What We Offer'}
+              </span>
+              <h2
+                className="font-playfair font-bold"
+                style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: 'var(--sf-charcoal)', lineHeight: 1.2 }}
+              >
+                {isAr ? 'خدماتنا الأساسية' : 'Our Core Services'}
+              </h2>
+            </div>
+            <a
+              href="#gallery"
+              className="flex items-center gap-2 text-sm font-semibold self-end"
+              style={{ color: 'var(--sf-brown)' }}
+            >
+              {isAr ? 'مشاهدة الأعمال' : 'View Our Work'}
+              <ArrowRight className="h-4 w-4" />
+            </a>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {services.map((service) => {
+          <div className="grid md:grid-cols-3 gap-6">
+            {services.map((service, idx) => {
               const sTitle = isAr ? (service.titleAr || service.title) : service.title
               const sDesc = isAr ? (service.descriptionAr || service.description) : service.description
-              const sFeatures = isAr ? (service.featuresAr.length > 0 ? service.featuresAr : service.features) : service.features
-              const sMsg = isAr ? (service.whatsappMessageAr || 'أريد طلب خدمة') : (service.whatsappMessage || 'I want to request service')
-              
+              const sFeatures = isAr
+                ? service.featuresAr.length > 0 ? service.featuresAr : service.features
+                : service.features
+              const sMsg = isAr
+                ? (service.whatsappMessageAr || 'أريد طلب خدمة')
+                : (service.whatsappMessage || 'I want to request service')
+
               return (
-                <div key={service.id} className="group flex flex-col bg-muted/30 rounded-2xl overflow-hidden border border-border hover:shadow-xl transition-all hover:-translate-y-1">
-                  {service.image && (
-                    <div className="relative h-60 w-full overflow-hidden">
-                      <Image src={service.image} alt={sTitle} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div
+                  key={service.id}
+                  className="group flex flex-col rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
+                  style={{
+                    background: '#fff',
+                    border: '1px solid rgba(212,184,150,0.35)',
+                    boxShadow: '0 2px 20px rgba(44,59,45,0.05)'
+                  }}
+                >
+                  {/* Service image or color band */}
+                  {service.image ? (
+                    <div className="relative h-52 w-full overflow-hidden">
+                      <Image
+                        src={service.image}
+                        alt={sTitle}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
                     </div>
+                  ) : (
+                    <div
+                      className="h-2 w-full"
+                      style={{
+                        background: idx === 0
+                          ? 'var(--sf-green)'
+                          : idx === 1
+                          ? 'var(--sf-brown)'
+                          : 'var(--sf-green-light)'
+                      }}
+                    />
                   )}
+
                   <div className="p-8 flex-1 flex flex-col">
-                    <h3 className="text-2xl font-bold mb-4">{sTitle}</h3>
-                    <p className="text-muted-foreground mb-6 flex-1">{sDesc}</p>
-                    
+                    {/* Icon */}
+                    <div
+                      className="w-12 h-12 rounded-full flex items-center justify-center mb-5"
+                      style={{ background: 'var(--sf-cream)', border: '1.5px solid var(--sf-tan)' }}
+                    >
+                      <DynamicIcon
+                        name={service.icon || 'Wrench'}
+                        className="h-5 w-5"
+                        style={{ color: 'var(--sf-green)' } as any}
+                      />
+                    </div>
+
+                    <h3
+                      className="font-playfair font-bold text-xl mb-3"
+                      style={{ color: 'var(--sf-charcoal)' }}
+                    >
+                      {sTitle}
+                    </h3>
+                    <p
+                      className="text-sm leading-relaxed mb-6 flex-1"
+                      style={{ color: 'var(--sf-warm-gray)', lineHeight: 1.75 }}
+                    >
+                      {sDesc}
+                    </p>
+
                     {sFeatures.length > 0 && (
                       <ul className="space-y-2 mb-8">
-                        {sFeatures.map((feature, i) => (
-                          <li key={i} className="flex items-start text-sm text-foreground/80">
-                            <span className="text-primary mr-2 ml-2 font-bold">•</span> 
-                            {feature}
+                        {sFeatures.slice(0, 4).map((f, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm" style={{ color: 'var(--sf-charcoal)' }}>
+                            <span
+                              className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
+                              style={{ background: 'var(--sf-brown)' }}
+                            />
+                            {f}
                           </li>
                         ))}
                       </ul>
                     )}
-                    
-                    <a 
-                      href={`https://wa.me/${wpNumber.replace(/\D/g,'')}?text=${encodeURIComponent(sMsg)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-auto w-full flex items-center justify-center gap-2 bg-[#25D366]/10 hover:bg-[#25D366] text-[#25D366] hover:text-white border border-[#25D366]/50 py-3 rounded-lg font-bold transition-colors"
-                    >
-                      <MessageCircle className="h-5 w-5" />
-                      {isAr ? 'اطلب الخدمة' : 'Request Service'}
-                    </a>
+
+                    {wpClean && (
+                      <a
+                        href={`https://wa.me/${wpClean}?text=${encodeURIComponent(sMsg)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-auto flex items-center justify-center gap-2 py-3 rounded-full text-sm font-semibold transition-all duration-200"
+                        style={{
+                          background: 'var(--sf-cream)',
+                          color: 'var(--sf-green)',
+                          border: '1.5px solid var(--sf-green)'
+                        }}
+                        onMouseOver={e => {
+                          ;(e.currentTarget as HTMLElement).style.background = 'var(--sf-green)'
+                          ;(e.currentTarget as HTMLElement).style.color = '#F5F0E8'
+                        }}
+                        onMouseOut={e => {
+                          ;(e.currentTarget as HTMLElement).style.background = 'var(--sf-cream)'
+                          ;(e.currentTarget as HTMLElement).style.color = 'var(--sf-green)'
+                        }}
+                      >
+                        <MessageCircle className="h-4 w-4" />
+                        {isAr ? 'اطلب الخدمة' : 'Request Service'}
+                      </a>
+                    )}
                   </div>
                 </div>
               )
@@ -166,31 +352,48 @@ export default async function StorefrontPage() {
         </div>
       </section>
 
-      {/* 3.5. PORTFOLIO GALLERY */}
+      {/* ══════════════════════════════════════════
+          4. PORTFOLIO GALLERY
+      ══════════════════════════════════════════ */}
       {galleryItems.length > 0 && (
-        <section id="gallery" className="py-24 px-6 bg-muted/50">
+        <section id="gallery" className="py-24 px-6" style={{ background: '#fff' }}>
           <div className="container mx-auto max-w-7xl">
-            <div className="text-center mb-16">
-              <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
-                {isAr ? 'معرض الأعمال' : 'Our Work Gallery'}
-              </h2>
-              <div className="h-1 w-20 bg-primary mx-auto rounded-full mb-8"></div>
-              
-              <ClientGallery items={galleryItems} isAr={isAr} />
+            <div className={`flex items-start justify-between mb-14 flex-wrap gap-4 ${isAr ? 'flex-row-reverse' : ''}`}>
+              <div>
+                <span className="sf-label block mb-3" style={{ color: 'var(--sf-brown)' }}>
+                  {isAr ? 'معرض الأعمال' : 'Portfolio'}
+                </span>
+                <h2
+                  className="font-playfair font-bold"
+                  style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: 'var(--sf-charcoal)', lineHeight: 1.2 }}
+                >
+                  {isAr ? 'أعمالنا المنجزة' : 'Our Completed Work'}
+                </h2>
+              </div>
             </div>
+            <ClientGallery items={galleryItems} isAr={isAr} />
           </div>
         </section>
       )}
 
-      {/* 4. STATS COUNTERS */}
+      {/* ══════════════════════════════════════════
+          5. STATS STRIP (dark green)
+      ══════════════════════════════════════════ */}
       {stats.length > 0 && (
-        <section className="py-20 px-6 bg-primary text-primary-foreground">
+        <section className="py-20 px-6" style={{ background: 'var(--sf-green)' }}>
           <div className="container mx-auto max-w-5xl">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {stats.map(stat => (
                 <div key={stat.id}>
-                  <div className="text-4xl md:text-5xl font-bold mb-2">{isAr ? (stat.valueAr || stat.value) : stat.value}</div>
-                  <div className="text-primary-foreground/80 font-medium">{isAr ? (stat.labelAr || stat.label) : stat.label}</div>
+                  <div
+                    className="font-playfair font-bold mb-1"
+                    style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#F5F0E8' }}
+                  >
+                    {isAr ? (stat.valueAr || stat.value) : stat.value}
+                  </div>
+                  <div className="text-sm font-medium" style={{ color: 'rgba(245,240,232,0.7)' }}>
+                    {isAr ? (stat.labelAr || stat.label) : stat.label}
+                  </div>
                 </div>
               ))}
             </div>
@@ -198,27 +401,52 @@ export default async function StorefrontPage() {
         </section>
       )}
 
-      {/* 5. TESTIMONIALS */}
+      {/* ══════════════════════════════════════════
+          6. TESTIMONIALS
+      ══════════════════════════════════════════ */}
       {testimonials.length > 0 && (
-        <section className="py-24 px-6 bg-muted">
+        <section className="py-24 px-6" style={{ background: 'var(--sf-cream-dark)' }}>
           <div className="container mx-auto max-w-6xl">
-            <div className="text-center mb-16">
-              <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
-                {isAr ? 'آراء عملائنا' : 'What Our Clients Say'}
+            <div className={`mb-14 ${isAr ? 'text-right' : 'text-left'}`}>
+              <span className="sf-label block mb-3" style={{ color: 'var(--sf-brown)' }}>
+                {isAr ? 'آراء العملاء' : 'Client Reviews'}
+              </span>
+              <h2
+                className="font-playfair font-bold"
+                style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: 'var(--sf-charcoal)', lineHeight: 1.2 }}
+              >
+                {isAr ? 'ماذا يقول عملاؤنا' : 'What Our Clients Say'}
               </h2>
-              <div className="h-1 w-20 bg-primary mx-auto rounded-full"></div>
             </div>
-            
-            <div className="grid md:grid-cols-3 gap-8">
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
               {testimonials.map(t => (
-                <div key={t.id} className="bg-background p-8 rounded-2xl shadow-sm border border-border">
-                  <div className="flex text-amber-500 mb-6">
-                    {Array.from({ length: t.rating || 5 }).map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
+                <div
+                  key={t.id}
+                  className="flex flex-col p-7 rounded-2xl"
+                  style={{ background: '#fff', border: '1px solid rgba(212,184,150,0.35)', boxShadow: '0 2px 20px rgba(44,59,45,0.05)' }}
+                >
+                  {/* Stars */}
+                  <div className="flex gap-0.5 mb-4">
+                    {Array.from({ length: t.rating || 5 }).map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" style={{ color: 'var(--sf-brown)' }} />
+                    ))}
                   </div>
-                  <p className="text-lg mb-8 italic">"{isAr ? (t.contentAr || t.content) : t.content}"</p>
+                  <p
+                    className="text-sm leading-relaxed mb-6 flex-1 italic"
+                    style={{ color: 'var(--sf-charcoal)', lineHeight: 1.8 }}
+                  >
+                    "{isAr ? (t.contentAr || t.content) : t.content}"
+                  </p>
+                  {/* Divider */}
+                  <div className="h-px mb-4" style={{ background: 'rgba(212,184,150,0.4)' }} />
                   <div>
-                    <div className="font-bold">{isAr ? (t.clientNameAr || t.clientName) : t.clientName}</div>
-                    <div className="text-sm text-muted-foreground">{isAr ? (t.clientLocationAr || t.clientLocation) : t.clientLocation}</div>
+                    <div className="font-bold text-sm" style={{ color: 'var(--sf-charcoal)' }}>
+                      {isAr ? (t.clientNameAr || t.clientName) : t.clientName}
+                    </div>
+                    <div className="text-xs mt-0.5" style={{ color: 'var(--sf-warm-gray)' }}>
+                      {isAr ? (t.clientLocationAr || t.clientLocation) : t.clientLocation}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -227,55 +455,108 @@ export default async function StorefrontPage() {
         </section>
       )}
 
-      {/* WHATSAPP CTA SECTION */}
-      {wpNumber && (
-        <section className="py-20 px-6 bg-background">
-          <div className="container mx-auto max-w-4xl text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#25D366]/10 border border-[#25D366]/30 text-[#25D366] text-sm font-medium mb-8">
-              <MessageCircle className="h-4 w-4" />
-              {isAr ? 'تواصل سريع' : 'Quick Contact'}
-            </div>
-            <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
-              {isAr ? 'احصل على عرض سعر مجاني الآن' : 'Get a Free Price Quote Now'}
+      {/* ══════════════════════════════════════════
+          7. WHATSAPP FREE QUOTE CTA
+      ══════════════════════════════════════════ */}
+      {wpClean && (
+        <section className="py-24 px-6" style={{ background: 'var(--sf-cream)' }}>
+          <div
+            className="container mx-auto max-w-4xl rounded-3xl py-16 px-8 md:px-16 text-center"
+            style={{ background: 'var(--sf-green)', position: 'relative', overflow: 'hidden' }}
+          >
+            {/* Decorative circles */}
+            <div
+              className="absolute top-[-4rem] right-[-4rem] w-64 h-64 rounded-full opacity-10"
+              style={{ background: 'var(--sf-cream)' }}
+            />
+            <div
+              className="absolute bottom-[-3rem] left-[-3rem] w-48 h-48 rounded-full opacity-10"
+              style={{ background: 'var(--sf-tan)' }}
+            />
+
+            <span
+              className="sf-label block mb-4"
+              style={{ color: 'rgba(245,240,232,0.7)', position: 'relative' }}
+            >
+              {isAr ? 'تواصل سريع ومجاني' : 'Quick & Free'}
+            </span>
+            <h2
+              className="font-playfair font-bold mb-4"
+              style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', color: '#F5F0E8', lineHeight: 1.2, position: 'relative' }}
+            >
+              {isAr ? 'احصل على عرض سعر مجاني الآن' : 'Get a Free Price Quote Today'}
             </h2>
-            <p className="text-muted-foreground text-lg mb-10 max-w-2xl mx-auto">
-              {isAr 
-                ? 'أرسل لنا صورة لمطبخك عبر واتساب وسنقدم لك تقييماً مجانياً وعرض سعر خلال دقائق.' 
-                : 'Send us a photo of your kitchen via WhatsApp and we\'ll give you a free assessment and price quote within minutes.'}
+            <p
+              className="mb-10 max-w-xl mx-auto"
+              style={{ color: 'rgba(245,240,232,0.75)', fontSize: '0.95rem', lineHeight: 1.8, position: 'relative' }}
+            >
+              {isAr
+                ? 'أرسل لنا صورة لمطبخك عبر واتساب وسنقدم لك تقييماً مجانياً وعرض سعر خلال دقائق.'
+                : "Send us a photo of your kitchen via WhatsApp and we'll give you a free assessment and price quote within minutes."}
             </p>
             <a
-              href={`https://wa.me/${wpNumber.replace(/\D/g,'')}?text=${encodeURIComponent(isAr ? 'مرحباً، أريد الاستفسار عن خدماتكم والحصول على عرض سعر.' : 'Hello, I would like to inquire about your services and get a price quote.')}`}
+              href={`https://wa.me/${wpClean}?text=${encodeURIComponent(isAr ? 'مرحباً، أريد الاستفسار والحصول على عرض سعر.' : 'Hello, I would like to get a free price quote.')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#25D366]/90 text-white px-10 py-4 rounded-full font-bold text-lg transition-transform hover:scale-105 shadow-xl"
+              className="inline-flex items-center gap-3 font-semibold transition-all duration-200 hover:-translate-y-1"
+              style={{
+                background: '#F5F0E8',
+                color: 'var(--sf-green)',
+                padding: '1rem 2.5rem',
+                borderRadius: '9999px',
+                fontSize: '0.9rem',
+                letterSpacing: '0.04em',
+                position: 'relative',
+                boxShadow: '0 8px 30px rgba(0,0,0,0.2)'
+              }}
             >
-              <MessageCircle className="h-6 w-6" />
+              <MessageCircle className="h-5 w-5" />
               {isAr ? 'ابدأ المحادثة على واتساب' : 'Chat on WhatsApp'}
+              <ArrowRight className="h-4 w-4" />
             </a>
           </div>
         </section>
       )}
 
-      {/* 6. FAQ */}
+      {/* ══════════════════════════════════════════
+          8. FAQ
+      ══════════════════════════════════════════ */}
       {faqs.length > 0 && (
-
-        <section id="faq" className="py-24 px-6 bg-background">
+        <section id="faq" className="py-24 px-6" style={{ background: '#fff' }}>
           <div className="container mx-auto max-w-3xl">
-            <div className="text-center mb-16">
-              <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
-                {isAr ? 'الأسئلة الشائعة' : 'Frequently Asked Questions'}
+            <div className={`mb-14 ${isAr ? 'text-right' : 'text-left'}`}>
+              <span className="sf-label block mb-3" style={{ color: 'var(--sf-brown)' }}>
+                {isAr ? 'الأسئلة الشائعة' : 'FAQ'}
+              </span>
+              <h2
+                className="font-playfair font-bold"
+                style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: 'var(--sf-charcoal)', lineHeight: 1.2 }}
+              >
+                {isAr ? 'أسئلة يطرحها عملاؤنا' : 'Questions We Get Asked'}
               </h2>
-              <div className="h-1 w-20 bg-primary mx-auto rounded-full"></div>
             </div>
-            
-            <div className="space-y-4">
+
+            <div className="space-y-3">
               {faqs.map((faq) => (
-                <details key={faq.id} className="group border border-border rounded-lg bg-muted/30 [&_summary::-webkit-details-marker]:hidden">
-                  <summary className="flex items-center justify-between p-6 cursor-pointer font-bold text-lg">
-                    {isAr ? (faq.questionAr || faq.question) : faq.question}
-                    <ChevronDown className="h-5 w-5 transition-transform group-open:rotate-180" />
+                <details
+                  key={faq.id}
+                  className="group [&_summary::-webkit-details-marker]:hidden rounded-2xl overflow-hidden"
+                  style={{ background: 'var(--sf-cream)', border: '1px solid rgba(212,184,150,0.4)' }}
+                >
+                  <summary
+                    className={`flex items-center justify-between p-6 cursor-pointer font-semibold text-sm ${isAr ? 'flex-row-reverse text-right' : ''}`}
+                    style={{ color: 'var(--sf-charcoal)', letterSpacing: '0.01em' }}
+                  >
+                    <span>{isAr ? (faq.questionAr || faq.question) : faq.question}</span>
+                    <ChevronDown
+                      className="h-4 w-4 transition-transform duration-300 group-open:rotate-180 flex-shrink-0 ml-4"
+                      style={{ color: 'var(--sf-brown)' }}
+                    />
                   </summary>
-                  <div className="px-6 pb-6 text-muted-foreground">
+                  <div
+                    className={`px-6 pb-6 text-sm leading-relaxed ${isAr ? 'text-right' : ''}`}
+                    style={{ color: 'var(--sf-warm-gray)', lineHeight: 1.8 }}
+                  >
                     {isAr ? (faq.answerAr || faq.answer) : faq.answer}
                   </div>
                 </details>
@@ -284,7 +565,6 @@ export default async function StorefrontPage() {
           </div>
         </section>
       )}
-
     </div>
   )
 }
