@@ -4,10 +4,12 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 
-export function Navbar() {
+export function Navbar({ brandName }: { brandName?: string }) {
   const { scrollY } = useScroll()
   const [hidden, setHidden] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  
+  const displayBrand = brandName || 'STUDIOCORE'
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious()
@@ -31,7 +33,7 @@ export function Navbar() {
     >
       <div className="container mx-auto px-6 h-20 flex items-center justify-between">
         <Link href="/" className="font-playfair text-2xl font-bold tracking-wider">
-          STUDIO<span className="text-muted-foreground">CORE</span>
+          {displayBrand.toUpperCase()}
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-sm uppercase tracking-widest text-muted-foreground font-medium">
           <Link href="/projects" className="hover:text-foreground transition-colors">Projects</Link>
