@@ -5,6 +5,7 @@ import { getLanguage } from '@/core/actions/language.actions'
 import { getSiteSettings } from '@/core/services/settings.service'
 import { Phone, MessageCircle, MapPin, ChevronDown, Star } from 'lucide-react'
 import * as LucideIcons from 'lucide-react'
+import { ClientGallery } from '@/components/storefront/ClientGallery'
 
 export const dynamic = 'force-dynamic'
 
@@ -175,37 +176,7 @@ export default async function StorefrontPage() {
               </h2>
               <div className="h-1 w-20 bg-primary mx-auto rounded-full mb-8"></div>
               
-              {/* Note: In a complete implementation, this filter would be client-side state. 
-                  For now, it displays all items. */}
-              <div className="flex flex-wrap justify-center gap-4">
-                <span className="px-6 py-2 bg-primary text-primary-foreground rounded-full text-sm font-bold shadow-sm">
-                  {isAr ? 'الكل' : 'All'}
-                </span>
-                <span className="px-6 py-2 bg-background border border-border text-muted-foreground rounded-full text-sm font-medium hover:border-primary hover:text-primary transition-colors cursor-pointer">
-                  {isAr ? 'صيانة' : 'Maintenance'}
-                </span>
-                <span className="px-6 py-2 bg-background border border-border text-muted-foreground rounded-full text-sm font-medium hover:border-primary hover:text-primary transition-colors cursor-pointer">
-                  {isAr ? 'تركيب' : 'Installation'}
-                </span>
-                <span className="px-6 py-2 bg-background border border-border text-muted-foreground rounded-full text-sm font-medium hover:border-primary hover:text-primary transition-colors cursor-pointer">
-                  {isAr ? 'فك' : 'Dismantling'}
-                </span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {galleryItems.map(item => (
-                <div key={item.id} className="group relative aspect-square overflow-hidden rounded-xl bg-muted">
-                  <Image src={item.imageUrl} alt={item.title || 'Portfolio Image'} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
-                    <h4 className="font-bold text-lg">{isAr ? (item.titleAr || item.title) : item.title}</h4>
-                    <p className="text-sm text-white/80">{isAr ? (item.captionAr || item.caption) : item.caption}</p>
-                    <span className="inline-block mt-3 text-xs font-bold uppercase tracking-wider text-primary">
-                      {item.serviceType}
-                    </span>
-                  </div>
-                </div>
-              ))}
+              <ClientGallery items={galleryItems} isAr={isAr} />
             </div>
           </div>
         </section>
