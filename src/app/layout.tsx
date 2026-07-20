@@ -18,15 +18,20 @@ export const metadata: Metadata = {
 };
 
 import { Toaster } from "@/components/ui/sonner";
+import { getLanguage } from "@/core/actions/language.actions";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const lang = await getLanguage();
+  const dir = lang === 'ar' ? 'rtl' : 'ltr';
+
   return (
     <html
-      lang="en"
+      lang={lang}
+      dir={dir}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">

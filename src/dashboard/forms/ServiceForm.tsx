@@ -25,12 +25,17 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
   const [loading, setLoading] = useState(false)
   const [image, setImage] = useState<string | null>(initialData?.image || null)
   const [features, setFeatures] = useState<string[]>(initialData?.features || [''])
+  const [featuresAr, setFeaturesAr] = useState<string[]>(initialData?.featuresAr || [''])
   
   const [formData, setFormData] = useState({
     title: initialData?.title ?? '',
+    titleAr: initialData?.titleAr ?? '',
     slug: initialData?.slug ?? '',
     description: initialData?.description ?? '',
+    descriptionAr: initialData?.descriptionAr ?? '',
     icon: initialData?.icon ?? '',
+    whatsappMessage: initialData?.whatsappMessage ?? '',
+    whatsappMessageAr: initialData?.whatsappMessageAr ?? '',
     status: initialData?.status ?? 'DRAFT',
   })
 
@@ -44,18 +49,26 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
     }
   }
 
-  const handleFeatureChange = (index: number, value: string) => {
-    const newFeatures = [...features]
-    newFeatures[index] = value
-    setFeatures(newFeatures)
+  const handleFeatureChange = (index: number, value: string, isAr = false) => {
+    if (isAr) {
+      const newFeatures = [...featuresAr]
+      newFeatures[index] = value
+      setFeaturesAr(newFeatures)
+    } else {
+      const newFeatures = [...features]
+      newFeatures[index] = value
+      setFeatures(newFeatures)
+    }
   }
 
-  const addFeature = () => {
-    setFeatures([...features, ''])
+  const addFeature = (isAr = false) => {
+    if (isAr) setFeaturesAr([...featuresAr, ''])
+    else setFeatures([...features, ''])
   }
 
-  const removeFeature = (index: number) => {
-    setFeatures(features.filter((_, i) => i !== index))
+  const removeFeature = (index: number, isAr = false) => {
+    if (isAr) setFeaturesAr(featuresAr.filter((_, i) => i !== index))
+    else setFeatures(features.filter((_, i) => i !== index))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,11 +77,13 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
 
     // filter out empty features
     const validFeatures = features.filter(f => f.trim() !== '')
+    const validFeaturesAr = featuresAr.filter(f => f.trim() !== '')
 
     const data = {
       ...formData,
       image,
       features: validFeatures,
+      featuresAr: validFeaturesAr,
     }
 
     try {
@@ -107,23 +122,51 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
         <CardContent className="space-y-4">
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title">Title (EN)</Label>
               <Input id="title" value={formData.title} onChange={handleTitleChange} required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="slug">URL Slug</Label>
-              <Input id="slug" value={formData.slug} onChange={(e) => setFormData({...formData, slug: e.target.value})} required />
+              <Label htmlFor="titleAr" className="text-right block">عنوان الخدمة (AR)</Label>
+              <Input id="titleAr" value={formData.titleAr} onChange={(e) => setFormData({...formData, titleAr: e.target.value})} dir="rtl" />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea 
-              id="description" 
-              rows={3}
-              value={formData.description} 
-              onChange={(e) => setFormData({...formData, description: e.target.value})} 
-            />
+            <Label htmlFor="slug">URL Slug (e.g. kitchen-installation)</Label>
+            <Input id="slug" value={formData.slug} onChange={(e) => setFormData({...formData, slug: e.target.value})} required />
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="description">Description (EN)</Label>
+              <Textarea 
+                id="description" 
+                rows={3}
+                value={formData.description} 
+                onChange={(e) => setFormData({...formData, description: e.target.value})} 
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="descriptionAr" className="text-right block">الوصف (AR)</Label>
+              <Textarea 
+                id="descriptionAr" 
+                rows={3}
+                value={formData.descriptionAr} 
+                onChange={(e) => setFormData({...formData, descriptionAr: e.target.value})} 
+                dir="rtl"
+              />
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="whatsappMessage">WhatsApp Pre-filled Msg (EN)</Label>
+              <Input id="whatsappMessage" value={formData.whatsappMessage} onChange={(e) => setFormData({...formData, whatsappMessage: e.target.value})} placeholder="I want to book..." />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="whatsappMessageAr" className="text-right block">رسالة واتساب مسبقة (AR)</Label>
+              <Input id="whatsappMessageAr" value={formData.whatsappMessageAr} onChange={(e) => setFormData({...formData, whatsappMessageAr: e.target.value})} dir="rtl" placeholder="أريد طلب خدمة..." />
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
@@ -152,22 +195,47 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
         <CardHeader>
           <CardTitle>Features</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          {features.map((feature, i) => (
-            <div key={i} className="flex items-center space-x-2">
-              <Input 
-                value={feature} 
-                onChange={(e) => handleFeatureChange(i, e.target.value)} 
-                placeholder="e.g. 3D Rendering & Visualization"
-              />
-              <Button type="button" variant="destructive" size="icon" onClick={() => removeFeature(i)}>
-                <X className="h-4 w-4" />
+        <CardContent className="grid md:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <h4 className="font-medium text-sm">Features (English)</h4>
+            {features.map((feature, i) => (
+              <div key={i} className="flex items-center space-x-2">
+                <Input 
+                  value={feature} 
+                  onChange={(e) => handleFeatureChange(i, e.target.value, false)} 
+                  placeholder="e.g. Fast response"
+                />
+                <Button type="button" variant="destructive" size="icon" onClick={() => removeFeature(i, false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button type="button" variant="outline" onClick={() => addFeature(false)}>
+              <Plus className="mr-2 h-4 w-4" /> Add EN Feature
+            </Button>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="font-medium text-sm text-right">المميزات (Arabic)</h4>
+            {featuresAr.map((feature, i) => (
+              <div key={i} className="flex items-center space-x-2">
+                <Button type="button" variant="destructive" size="icon" onClick={() => removeFeature(i, true)}>
+                  <X className="h-4 w-4" />
+                </Button>
+                <Input 
+                  value={feature} 
+                  onChange={(e) => handleFeatureChange(i, e.target.value, true)} 
+                  dir="rtl"
+                  placeholder="سرعة الاستجابة..."
+                />
+              </div>
+            ))}
+            <div className="flex justify-end">
+              <Button type="button" variant="outline" onClick={() => addFeature(true)}>
+                <Plus className="mr-2 h-4 w-4" /> Add AR Feature
               </Button>
             </div>
-          ))}
-          <Button type="button" variant="outline" onClick={addFeature}>
-            <Plus className="mr-2 h-4 w-4" /> Add Feature
-          </Button>
+          </div>
         </CardContent>
       </Card>
 

@@ -2,16 +2,18 @@ import { Playfair_Display, Inter } from 'next/font/google'
 import { Navbar } from '@/components/storefront/Navbar'
 import { Footer } from '@/components/storefront/Footer'
 import { getSiteSettings } from '@/core/services/settings.service'
+import { getLanguage } from '@/core/actions/language.actions'
 
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export default async function StorefrontLayout({ children }: { children: React.ReactNode }) {
   const settings = await getSiteSettings()
+  const lang = await getLanguage()
   
   return (
     <div className={`min-h-screen bg-background text-foreground dark ${playfair.variable} ${inter.variable} font-sans`}>
-      <Navbar brandName={settings?.brandName} />
+      <Navbar brandName={settings?.brandName} brandNameAr={settings?.brandNameAr} lang={lang} />
       <main>{children}</main>
       <Footer />
     </div>

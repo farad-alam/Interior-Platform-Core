@@ -21,20 +21,39 @@ enum Role {
 }
 
 model SiteSettings {
-  id          String   @id @default(cuid())
-  brandName   String
-  logoUrl     String?
-  phone       String?
-  whatsapp    String
-  email       String?
-  address     String?
-  facebook    String?
-  instagram   String?
-  twitter     String?
-  linkedin    String?
-  youtube     String?
-  tiktok      String?
-  updatedAt   DateTime @updatedAt
+  id                String   @id @default(cuid())
+  brandName         String
+  brandNameAr       String?
+  logoUrl           String?
+  phone             String?
+  whatsapp          String
+  email             String?
+  address           String?
+  addressAr         String?
+  facebook          String?
+  instagram         String?
+  twitter           String?
+  linkedin          String?
+  youtube           String?
+  tiktok            String?
+  
+  // Hero Section Config
+  heroHeadline      String?
+  heroHeadlineAr    String?
+  heroSubheadline   String?
+  heroSubheadlineAr String?
+  heroImage         String? // Cloudinary URL
+  
+  // Contact & Footer Config
+  workingHours      String?
+  workingHoursAr    String?
+  mapEmbedUrl       String?
+  serviceAreas      String?
+  serviceAreasAr    String?
+  footerTagline     String?
+  footerTaglineAr   String?
+  
+  updatedAt         DateTime @updatedAt
 }
 
 model Project {
@@ -52,16 +71,21 @@ model Project {
 }
 
 model Service {
-  id          String        @id @default(cuid())
-  title       String
-  slug        String        @unique
-  description String?
-  icon        String?       // Icon name or Cloudinary URL
-  image       String?       // Cloudinary URL
-  features    String[]      // List of bullet point features
-  status      ContentStatus @default(DRAFT)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id                String        @id @default(cuid())
+  title             String
+  titleAr           String?
+  slug              String        @unique
+  description       String?
+  descriptionAr     String?
+  icon              String?       // Icon name or Cloudinary URL
+  image             String?       // Cloudinary URL
+  features          String[]      // List of bullet point features
+  featuresAr        String[]      // Arabic bullet points
+  whatsappMessage   String?       // Pre-filled EN message
+  whatsappMessageAr String?       // Pre-filled AR message
+  status            ContentStatus @default(DRAFT)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 }
 
 model Category {
@@ -75,34 +99,43 @@ model Category {
 }
 
 model GalleryItem {
-  id         String        @id @default(cuid())
-  imageUrl   String        // Cloudinary URL
-  title      String?
-  caption    String?
-  categoryId String?
-  category   Category?     @relation(fields: [categoryId], references: [id])
-  status     ContentStatus @default(DRAFT)
-  createdAt  DateTime      @default(now())
-}
-
-model Testimonial {
   id          String        @id @default(cuid())
-  clientName  String
-  clientTitle String?
-  content     String
-  avatarUrl   String?       // Cloudinary URL
-  rating      Int?          @default(5)
-  featured    Boolean       @default(false)
+  imageUrl    String        // Cloudinary URL
+  title       String?
+  titleAr     String?
+  caption     String?
+  captionAr   String?
+  categoryId  String?
+  category    Category?     @relation(fields: [categoryId], references: [id])
+  serviceType String?       // e.g., 'maintenance', 'installation', 'dismantling'
   status      ContentStatus @default(DRAFT)
   createdAt   DateTime      @default(now())
 }
 
+model Testimonial {
+  id               String        @id @default(cuid())
+  clientName       String
+  clientNameAr     String?
+  clientLocation   String?
+  clientLocationAr String?
+  clientTitle      String?
+  content          String
+  contentAr        String?
+  avatarUrl        String?       // Cloudinary URL
+  rating           Int?          @default(5)
+  featured         Boolean       @default(false)
+  status           ContentStatus @default(DRAFT)
+  createdAt        DateTime      @default(now())
+}
+
 model FAQ {
-  id        String        @id @default(cuid())
-  question  String
-  answer    String
-  status    ContentStatus @default(DRAFT)
-  createdAt DateTime      @default(now())
+  id         String        @id @default(cuid())
+  question   String
+  questionAr String?
+  answer     String
+  answerAr   String?
+  status     ContentStatus @default(DRAFT)
+  createdAt  DateTime      @default(now())
 }
 
 model SEO {
@@ -131,4 +164,40 @@ enum ContentStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+model TrustFeature {
+  id            String   @id @default(cuid())
+  title         String
+  titleAr       String?
+  description   String?
+  descriptionAr String?
+  icon          String?
+  order         Int      @default(0)
+}
+
+model StatCounter {
+  id      String  @id @default(cuid())
+  label   String
+  labelAr String?
+  value   String
+  valueAr String?
+  icon    String?
+  order   Int     @default(0)
+}
+
+model BlogPost {
+  id         String        @id @default(cuid())
+  title      String
+  titleAr    String?
+  slug       String        @unique
+  excerpt    String?
+  excerptAr  String?
+  content    String        @db.Text
+  contentAr  String?       @db.Text
+  coverImage String?
+  author     String?
+  status     ContentStatus @default(DRAFT)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
 }
