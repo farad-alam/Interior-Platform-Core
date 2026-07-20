@@ -263,7 +263,7 @@ async function main() {
   ]
 
   for (const item of galleryItems) {
-    await prisma.galleryItem.create({ data: item })
+    await prisma.galleryItem.create({ data: item as any })
   }
   console.log(`  ✓ Created ${galleryItems.length} Gallery Items`)
 
