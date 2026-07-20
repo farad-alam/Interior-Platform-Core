@@ -10,8 +10,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <AppSidebar />
         <div className="flex flex-col w-full min-h-screen">
           <AppHeader />
-          <main className="flex-1 p-6 bg-gray-50/50">
-            {children}
+          <main className="flex-1 p-6 md:p-10 bg-muted/30">
+            <div className="max-w-6xl mx-auto w-full">
+              {children}
+            </div>
           </main>
         </div>
       </SidebarProvider>

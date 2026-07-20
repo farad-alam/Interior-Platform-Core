@@ -8,7 +8,9 @@ import {
   SidebarGroupLabel, 
   SidebarMenu, 
   SidebarMenuButton, 
-  SidebarMenuItem 
+  SidebarMenuItem,
+  SidebarHeader,
+  SidebarFooter
 } from '@/components/ui/sidebar'
 import { 
   LayoutDashboard, 
@@ -18,19 +20,19 @@ import {
   HelpCircle, 
   Settings, 
   ImagePlus,
-  Layers
+  Layers,
+  LogOut,
+  Sparkles
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 
 const items = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
   { title: 'Projects', url: '/dashboard/projects', icon: Briefcase },
   { title: 'Services', url: '/dashboard/services', icon: Layers },
   { title: 'Categories', url: '/dashboard/categories', icon: Layers },
-  { title: 'Gallery', url: '/dashboard/gallery', icon: ImageIcon },
-  { title: 'Testimonials', url: '/dashboard/testimonials', icon: MessageSquare },
-  { title: 'FAQs', url: '/dashboard/faqs', icon: HelpCircle },
   { title: 'Media Library', url: '/dashboard/media', icon: ImagePlus },
   { title: 'Settings', url: '/dashboard/settings', icon: Settings },
 ]
@@ -42,19 +44,29 @@ export function AppSidebar() {
   if (pathname === '/dashboard/login') return null
 
   return (
-    <Sidebar>
-      <SidebarContent>
+    <Sidebar className="border-r border-sidebar-border bg-sidebar">
+      <SidebarHeader className="p-6 pb-2">
+        <Link href="/" className="flex items-center gap-2 font-semibold text-lg hover:opacity-80 transition-opacity">
+          <div className="bg-primary text-primary-foreground p-1.5 rounded-md">
+            <Sparkles className="w-5 h-5" />
+          </div>
+          StudioCore
+        </Link>
+      </SidebarHeader>
+      <SidebarContent className="px-2">
         <SidebarGroup>
-          <SidebarGroupLabel>Agency Platform</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-xs uppercase tracking-widest opacity-60 mt-4 mb-2">Platform</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-1.5">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton isActive={pathname === item.url}>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
+                  <SidebarMenuButton 
+                    isActive={pathname === item.url || pathname.startsWith(`${item.url}/`)} 
+                    render={<Link href={item.url} />}
+                    className="font-medium h-10 px-3"
+                  >
+                    <item.icon className="w-5 h-5" />
+                    <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -62,6 +74,19 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className="p-4 border-t border-sidebar-border/50">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton 
+              className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors h-10"
+              onClick={() => signOut({ callbackUrl: '/dashboard/login' })}
+            >
+              <LogOut className="w-5 h-5" />
+              <span>Log out</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   )
 }
