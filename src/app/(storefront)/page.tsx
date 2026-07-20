@@ -325,20 +325,7 @@ export default async function StorefrontPage() {
                         href={`https://wa.me/${wpClean}?text=${encodeURIComponent(sMsg)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-auto flex items-center justify-center gap-2 py-3 rounded-full text-sm font-semibold transition-all duration-200"
-                        style={{
-                          background: 'var(--sf-cream)',
-                          color: 'var(--sf-green)',
-                          border: '1.5px solid var(--sf-green)'
-                        }}
-                        onMouseOver={e => {
-                          ;(e.currentTarget as HTMLElement).style.background = 'var(--sf-green)'
-                          ;(e.currentTarget as HTMLElement).style.color = '#F5F0E8'
-                        }}
-                        onMouseOut={e => {
-                          ;(e.currentTarget as HTMLElement).style.background = 'var(--sf-cream)'
-                          ;(e.currentTarget as HTMLElement).style.color = 'var(--sf-green)'
-                        }}
+                        className="mt-auto flex items-center justify-center gap-2 py-3 rounded-full text-sm font-semibold transition-all duration-200 group-hover:bg-[#2C3B2D] group-hover:text-[#F5F0E8] hover:bg-[#2C3B2D] hover:text-[#F5F0E8] bg-[#F5F0E8] text-[#2C3B2D] border-[1.5px] border-[#2C3B2D]"
                       >
                         <MessageCircle className="h-4 w-4" />
                         {isAr ? 'اطلب الخدمة' : 'Request Service'}
