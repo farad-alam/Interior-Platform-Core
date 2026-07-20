@@ -227,8 +227,38 @@ export default async function StorefrontPage() {
         </section>
       )}
 
+      {/* WHATSAPP CTA SECTION */}
+      {wpNumber && (
+        <section className="py-20 px-6 bg-background">
+          <div className="container mx-auto max-w-4xl text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#25D366]/10 border border-[#25D366]/30 text-[#25D366] text-sm font-medium mb-8">
+              <MessageCircle className="h-4 w-4" />
+              {isAr ? 'تواصل سريع' : 'Quick Contact'}
+            </div>
+            <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
+              {isAr ? 'احصل على عرض سعر مجاني الآن' : 'Get a Free Price Quote Now'}
+            </h2>
+            <p className="text-muted-foreground text-lg mb-10 max-w-2xl mx-auto">
+              {isAr 
+                ? 'أرسل لنا صورة لمطبخك عبر واتساب وسنقدم لك تقييماً مجانياً وعرض سعر خلال دقائق.' 
+                : 'Send us a photo of your kitchen via WhatsApp and we\'ll give you a free assessment and price quote within minutes.'}
+            </p>
+            <a
+              href={`https://wa.me/${wpNumber.replace(/\D/g,'')}?text=${encodeURIComponent(isAr ? 'مرحباً، أريد الاستفسار عن خدماتكم والحصول على عرض سعر.' : 'Hello, I would like to inquire about your services and get a price quote.')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#25D366]/90 text-white px-10 py-4 rounded-full font-bold text-lg transition-transform hover:scale-105 shadow-xl"
+            >
+              <MessageCircle className="h-6 w-6" />
+              {isAr ? 'ابدأ المحادثة على واتساب' : 'Chat on WhatsApp'}
+            </a>
+          </div>
+        </section>
+      )}
+
       {/* 6. FAQ */}
       {faqs.length > 0 && (
+
         <section id="faq" className="py-24 px-6 bg-background">
           <div className="container mx-auto max-w-3xl">
             <div className="text-center mb-16">
