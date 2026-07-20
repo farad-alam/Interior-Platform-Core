@@ -18,12 +18,13 @@ export default async function StorefrontPage() {
   const lang = await getLanguage()
   const settings = await getSiteSettings()
   
-  const [services, trustFeatures, stats, faqs, testimonials] = await Promise.all([
+  const [services, trustFeatures, stats, faqs, testimonials, galleryItems] = await Promise.all([
     prisma.service.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } }),
     prisma.trustFeature.findMany({ orderBy: { order: 'asc' } }),
     prisma.statCounter.findMany({ orderBy: { order: 'asc' } }),
     prisma.fAQ.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'desc' } }),
-    prisma.testimonial.findMany({ where: { status: 'PUBLISHED', featured: true }, orderBy: { createdAt: 'desc' } })
+    prisma.testimonial.findMany({ where: { status: 'PUBLISHED', featured: true }, orderBy: { createdAt: 'desc' } }),
+    prisma.galleryItem.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'desc' } })
   ])
 
   const isAr = lang === 'ar'
@@ -163,6 +164,52 @@ export default async function StorefrontPage() {
           </div>
         </div>
       </section>
+
+      {/* 3.5. PORTFOLIO GALLERY */}
+      {galleryItems.length > 0 && (
+        <section id="gallery" className="py-24 px-6 bg-muted/50">
+          <div className="container mx-auto max-w-7xl">
+            <div className="text-center mb-16">
+              <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
+                {isAr ? 'معرض الأعمال' : 'Our Work Gallery'}
+              </h2>
+              <div className="h-1 w-20 bg-primary mx-auto rounded-full mb-8"></div>
+              
+              {/* Note: In a complete implementation, this filter would be client-side state. 
+                  For now, it displays all items. */}
+              <div className="flex flex-wrap justify-center gap-4">
+                <span className="px-6 py-2 bg-primary text-primary-foreground rounded-full text-sm font-bold shadow-sm">
+                  {isAr ? 'الكل' : 'All'}
+                </span>
+                <span className="px-6 py-2 bg-background border border-border text-muted-foreground rounded-full text-sm font-medium hover:border-primary hover:text-primary transition-colors cursor-pointer">
+                  {isAr ? 'صيانة' : 'Maintenance'}
+                </span>
+                <span className="px-6 py-2 bg-background border border-border text-muted-foreground rounded-full text-sm font-medium hover:border-primary hover:text-primary transition-colors cursor-pointer">
+                  {isAr ? 'تركيب' : 'Installation'}
+                </span>
+                <span className="px-6 py-2 bg-background border border-border text-muted-foreground rounded-full text-sm font-medium hover:border-primary hover:text-primary transition-colors cursor-pointer">
+                  {isAr ? 'فك' : 'Dismantling'}
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {galleryItems.map(item => (
+                <div key={item.id} className="group relative aspect-square overflow-hidden rounded-xl bg-muted">
+                  <Image src={item.imageUrl} alt={item.title || 'Portfolio Image'} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
+                    <h4 className="font-bold text-lg">{isAr ? (item.titleAr || item.title) : item.title}</h4>
+                    <p className="text-sm text-white/80">{isAr ? (item.captionAr || item.caption) : item.caption}</p>
+                    <span className="inline-block mt-3 text-xs font-bold uppercase tracking-wider text-primary">
+                      {item.serviceType}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 4. STATS COUNTERS */}
       {stats.length > 0 && (

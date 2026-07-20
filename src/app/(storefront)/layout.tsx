@@ -3,6 +3,7 @@ import { Navbar } from '@/components/storefront/Navbar'
 import { Footer } from '@/components/storefront/Footer'
 import { getSiteSettings } from '@/core/services/settings.service'
 import { getLanguage } from '@/core/actions/language.actions'
+import { FloatingWhatsApp } from '@/components/storefront/FloatingWhatsApp'
 
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -16,6 +17,7 @@ export default async function StorefrontLayout({ children }: { children: React.R
       <Navbar brandName={settings?.brandName} brandNameAr={settings?.brandNameAr} lang={lang} />
       <main>{children}</main>
       <Footer />
+      <FloatingWhatsApp whatsappNumber={settings?.whatsapp || null} lang={lang} />
     </div>
   )
 }
