@@ -30,8 +30,12 @@ import { signOut } from 'next-auth/react'
 
 const items = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
-  { title: 'Projects', url: '/dashboard/projects', icon: Briefcase },
   { title: 'Services', url: '/dashboard/services', icon: Layers },
+  { title: 'Trust Features', url: '/dashboard/trust-features', icon: Sparkles },
+  { title: 'Stats Counter', url: '/dashboard/stats', icon: Layers },
+  { title: 'Gallery', url: '/dashboard/gallery', icon: ImageIcon },
+  { title: 'Testimonials', url: '/dashboard/testimonials', icon: MessageSquare },
+  { title: 'FAQs', url: '/dashboard/faqs', icon: HelpCircle },
   { title: 'Categories', url: '/dashboard/categories', icon: Layers },
   { title: 'Media Library', url: '/dashboard/media', icon: ImagePlus },
   { title: 'Settings', url: '/dashboard/settings', icon: Settings },

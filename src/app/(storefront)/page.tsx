@@ -3,18 +3,28 @@ import Link from 'next/link'
 import { prisma } from '@/core/db/client'
 import { getLanguage } from '@/core/actions/language.actions'
 import { getSiteSettings } from '@/core/services/settings.service'
-import { Phone, MessageCircle, Wrench, ShieldCheck, Clock, MapPin } from 'lucide-react'
+import { Phone, MessageCircle, MapPin, ChevronDown, Star } from 'lucide-react'
+import * as LucideIcons from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
+
+// Helper to dynamically render a Lucide icon by name
+const DynamicIcon = ({ name, className }: { name: string, className?: string }) => {
+  const Icon = (LucideIcons as any)[name] || LucideIcons.CheckCircle
+  return <Icon className={className} />
+}
 
 export default async function StorefrontPage() {
   const lang = await getLanguage()
   const settings = await getSiteSettings()
   
-  const services = await prisma.service.findMany({
-    where: { status: 'PUBLISHED' },
-    orderBy: { createdAt: 'asc' },
-  })
+  const [services, trustFeatures, stats, faqs, testimonials] = await Promise.all([
+    prisma.service.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } }),
+    prisma.trustFeature.findMany({ orderBy: { order: 'asc' } }),
+    prisma.statCounter.findMany({ orderBy: { order: 'asc' } }),
+    prisma.fAQ.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'desc' } }),
+    prisma.testimonial.findMany({ where: { status: 'PUBLISHED', featured: true }, orderBy: { createdAt: 'desc' } })
+  ])
 
   const isAr = lang === 'ar'
 
@@ -80,35 +90,23 @@ export default async function StorefrontPage() {
       </section>
 
       {/* 2. WHY CHOOSE US (Trust Signals) */}
-      <section className="py-20 px-6 bg-muted">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-background p-8 rounded-2xl shadow-sm flex flex-col items-center text-center border border-border/50">
-              <div className="h-16 w-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary">
-                <ShieldCheck className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">{isAr ? 'عمل مضمون' : 'Guaranteed Work'}</h3>
-              <p className="text-muted-foreground">{isAr ? 'نقدم ضماناً على كافة أعمال الصيانة والتركيب لضمان راحة بالك.' : 'We provide a warranty on all maintenance and installation work for your peace of mind.'}</p>
-            </div>
-            
-            <div className="bg-background p-8 rounded-2xl shadow-sm flex flex-col items-center text-center border border-border/50">
-              <div className="h-16 w-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary">
-                <Clock className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">{isAr ? 'استجابة سريعة' : 'Fast Response'}</h3>
-              <p className="text-muted-foreground">{isAr ? 'فريقنا مستعد لتلبية طلبك في أسرع وقت داخل مدينة الرياض.' : 'Our team is ready to fulfill your request as quickly as possible within Riyadh.'}</p>
-            </div>
-            
-            <div className="bg-background p-8 rounded-2xl shadow-sm flex flex-col items-center text-center border border-border/50">
-              <div className="h-16 w-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary">
-                <Wrench className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">{isAr ? 'فنيون خبراء' : 'Expert Technicians'}</h3>
-              <p className="text-muted-foreground">{isAr ? 'عمالة مدربة وذات خبرة طويلة في التعامل مع جميع أنواع المطابخ.' : 'Trained workforce with extensive experience handling all types of kitchens.'}</p>
+      {trustFeatures.length > 0 && (
+        <section className="py-20 px-6 bg-muted">
+          <div className="container mx-auto max-w-6xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {trustFeatures.map(feature => (
+                <div key={feature.id} className="bg-background p-8 rounded-2xl shadow-sm flex flex-col items-center text-center border border-border/50">
+                  <div className="h-16 w-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary">
+                    <DynamicIcon name={feature.icon || 'CheckCircle'} className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">{isAr ? (feature.titleAr || feature.title) : feature.title}</h3>
+                  <p className="text-muted-foreground">{isAr ? (feature.descriptionAr || feature.description) : feature.description}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 3. CORE SERVICES */}
       <section id="services" className="py-24 px-6 bg-background">
@@ -166,7 +164,79 @@ export default async function StorefrontPage() {
         </div>
       </section>
 
-      {/* WhatsApp Floating CTA (Client Component will be injected here) */}
+      {/* 4. STATS COUNTERS */}
+      {stats.length > 0 && (
+        <section className="py-20 px-6 bg-primary text-primary-foreground">
+          <div className="container mx-auto max-w-5xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              {stats.map(stat => (
+                <div key={stat.id}>
+                  <div className="text-4xl md:text-5xl font-bold mb-2">{isAr ? (stat.valueAr || stat.value) : stat.value}</div>
+                  <div className="text-primary-foreground/80 font-medium">{isAr ? (stat.labelAr || stat.label) : stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 5. TESTIMONIALS */}
+      {testimonials.length > 0 && (
+        <section className="py-24 px-6 bg-muted">
+          <div className="container mx-auto max-w-6xl">
+            <div className="text-center mb-16">
+              <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
+                {isAr ? 'آراء عملائنا' : 'What Our Clients Say'}
+              </h2>
+              <div className="h-1 w-20 bg-primary mx-auto rounded-full"></div>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              {testimonials.map(t => (
+                <div key={t.id} className="bg-background p-8 rounded-2xl shadow-sm border border-border">
+                  <div className="flex text-amber-500 mb-6">
+                    {Array.from({ length: t.rating || 5 }).map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
+                  </div>
+                  <p className="text-lg mb-8 italic">"{isAr ? (t.contentAr || t.content) : t.content}"</p>
+                  <div>
+                    <div className="font-bold">{isAr ? (t.clientNameAr || t.clientName) : t.clientName}</div>
+                    <div className="text-sm text-muted-foreground">{isAr ? (t.clientLocationAr || t.clientLocation) : t.clientLocation}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 6. FAQ */}
+      {faqs.length > 0 && (
+        <section id="faq" className="py-24 px-6 bg-background">
+          <div className="container mx-auto max-w-3xl">
+            <div className="text-center mb-16">
+              <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
+                {isAr ? 'الأسئلة الشائعة' : 'Frequently Asked Questions'}
+              </h2>
+              <div className="h-1 w-20 bg-primary mx-auto rounded-full"></div>
+            </div>
+            
+            <div className="space-y-4">
+              {faqs.map((faq) => (
+                <details key={faq.id} className="group border border-border rounded-lg bg-muted/30 [&_summary::-webkit-details-marker]:hidden">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer font-bold text-lg">
+                    {isAr ? (faq.questionAr || faq.question) : faq.question}
+                    <ChevronDown className="h-5 w-5 transition-transform group-open:rotate-180" />
+                  </summary>
+                  <div className="px-6 pb-6 text-muted-foreground">
+                    {isAr ? (faq.answerAr || faq.answer) : faq.answer}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
     </div>
   )
 }
