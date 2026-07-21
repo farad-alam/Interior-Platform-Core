@@ -9,7 +9,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
-import { ImageUpload } from '@/components/ui/image-upload'
+import { ImageUpload } from '@/dashboard/components/ImageUpload'
+import Image from 'next/image'
+import { X } from 'lucide-react'
 
 export function SettingsForm({ initialData }: { initialData: Prisma.SiteSettingsGetPayload<{}> | null }) {
   const router = useRouter()
@@ -111,25 +113,43 @@ export function SettingsForm({ initialData }: { initialData: Prisma.SiteSettings
                 These images will automatically slide in the hero section. We recommend using 16:9 high-resolution images.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {[0, 1, 2].map((index) => (
-                  <div key={index} className="space-y-2">
-                    <Label className="text-xs text-gray-500 uppercase">Image {index + 1}</Label>
-                    <ImageUpload
-                      value={heroImages[index] || ''}
-                      onChange={(url) => {
-                        const newImages = [...heroImages]
-                        newImages[index] = url
-                        // Remove empty gaps if user deletes an earlier image but keeps a later one
-                        setHeroImages(newImages.filter(Boolean))
-                      }}
-                      onRemove={() => {
-                        const newImages = [...heroImages]
-                        newImages.splice(index, 1)
-                        setHeroImages(newImages)
-                      }}
-                    />
-                  </div>
-                ))}
+                {[0, 1, 2].map((index) => {
+                  const url = heroImages[index]
+                  return (
+                    <div key={index} className="space-y-2">
+                      <Label className="text-xs text-gray-500 uppercase">Image {index + 1}</Label>
+                      {url ? (
+                        <div className="relative w-full h-48 rounded-lg overflow-hidden border border-border">
+                          <Image src={url} alt={`Hero ${index + 1}`} fill className="object-cover" />
+                          <div className="absolute top-2 right-2">
+                            <Button 
+                              type="button" 
+                              variant="destructive" 
+                              size="icon" 
+                              onClick={() => {
+                                const newImages = [...heroImages]
+                                newImages.splice(index, 1)
+                                setHeroImages(newImages.filter(Boolean))
+                              }}
+                              disabled={loading}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <ImageUpload
+                          onUploadSuccess={(newUrl) => {
+                            const newImages = [...heroImages]
+                            newImages[index] = newUrl
+                            setHeroImages(newImages.filter(Boolean))
+                          }}
+                          disabled={loading}
+                        />
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             </div>
 
