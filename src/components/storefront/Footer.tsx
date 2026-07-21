@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { prisma } from '@/core/db/client'
 import { getLanguage } from '@/core/actions/language.actions'
-import { Phone, MapPin, Clock, MessageCircle, ArrowRight, Instagram } from 'lucide-react'
+import { Phone, MapPin, Clock, MessageCircle, ArrowRight } from 'lucide-react'
 
 // Custom SVGs for Snapchat and TikTok if Lucide doesn't have them
 function SnapchatIcon(props: any) {
@@ -24,6 +24,16 @@ function XIcon(props: any) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M4 4l16 16M4 20L20 4" />
+    </svg>
+  )
+}
+
+function InstagramIcon(props: any) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
     </svg>
   )
 }
@@ -141,7 +151,7 @@ export async function Footer() {
               )}
               {settings?.instagram && (
                 <a href={settings.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:-translate-y-1" style={{ background: 'rgba(245,240,232,0.05)', color: '#D4B896' }}>
-                  <Instagram className="h-5 w-5" />
+                  <InstagramIcon className="h-5 w-5" />
                 </a>
               )}
               {settings?.twitter && (
