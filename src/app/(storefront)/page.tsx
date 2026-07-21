@@ -7,6 +7,8 @@ import { MessageCircle, MapPin, ChevronDown, Star, ArrowRight, Phone } from 'luc
 import * as LucideIcons from 'lucide-react'
 import { ClientGallery } from '@/components/storefront/ClientGallery'
 
+import { HeroSlider } from '@/components/storefront/HeroSlider'
+
 export const dynamic = 'force-dynamic'
 
 const DynamicIcon = ({ name, className, style }: { name: string; className?: string; style?: React.CSSProperties }) => {
@@ -45,6 +47,13 @@ export default async function StorefrontPage() {
   const words = headline.split(' ')
   const lastWord = words.pop()
   const restWords = words.join(' ')
+  
+  // Use heroImages array, falling back to legacy single heroImage if present
+  const heroImages = settings?.heroImages?.length 
+    ? settings.heroImages 
+    : (settings as any)?.heroImage 
+      ? [(settings as any).heroImage] 
+      : []
 
   return (
     <div className="flex flex-col w-full" style={{ background: 'var(--sf-cream)' }}>
@@ -53,14 +62,8 @@ export default async function StorefrontPage() {
           1. HERO — FULL BACKGROUND IMAGE
       ══════════════════════════════════════════ */}
       <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
-        <Image
-          src={settings?.heroImage || 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2070&auto=format&fit=crop'}
-          alt="Aluminum Kitchen"
-          fill
-          className="object-cover"
-          priority
-        />
+        {/* Background Image Slider */}
+        <HeroSlider images={heroImages} />
         {/* Dark Overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#1A2421]/80 via-[#1A2421]/60 to-[#1A2421]/90" />
 

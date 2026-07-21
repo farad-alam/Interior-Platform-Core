@@ -9,10 +9,21 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
+import { ImageUpload } from '@/components/ui/image-upload'
 
 export function SettingsForm({ initialData }: { initialData: Prisma.SiteSettingsGetPayload<{}> | null }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  
+  // Convert legacy single string to array for backward compatibility
+  const initialHeroImages = initialData?.heroImages?.length 
+    ? initialData.heroImages 
+    : (initialData as any)?.heroImage 
+      ? [(initialData as any).heroImage] 
+      : []
+      
+  const [heroImages, setHeroImages] = useState<string[]>(initialHeroImages)
+  
   const [formData, setFormData] = useState({
     brandName: initialData?.brandName ?? '',
     brandNameAr: initialData?.brandNameAr ?? '',
@@ -50,7 +61,9 @@ export function SettingsForm({ initialData }: { initialData: Prisma.SiteSettings
       return
     }
 
-    const res = await updateSettingsAction(initialData.id, formData)
+    const dataToSubmit = { ...formData, heroImages }
+
+    const res = await updateSettingsAction(initialData.id, dataToSubmit)
     
     if (res.success) {
       toast.success('Settings updated successfully.')
@@ -91,6 +104,35 @@ export function SettingsForm({ initialData }: { initialData: Prisma.SiteSettings
           {/* Hero Section */}
           <div className="space-y-4">
             <h3 className="font-semibold text-lg border-b pb-2">Hero Section</h3>
+            
+            <div className="space-y-4 mb-6 p-4 rounded-xl border bg-gray-50/50">
+              <Label className="text-base font-semibold">Hero Background Images (Up to 3)</Label>
+              <p className="text-sm text-gray-500 mb-4">
+                These images will automatically slide in the hero section. We recommend using 16:9 high-resolution images.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {[0, 1, 2].map((index) => (
+                  <div key={index} className="space-y-2">
+                    <Label className="text-xs text-gray-500 uppercase">Image {index + 1}</Label>
+                    <ImageUpload
+                      value={heroImages[index] || ''}
+                      onChange={(url) => {
+                        const newImages = [...heroImages]
+                        newImages[index] = url
+                        // Remove empty gaps if user deletes an earlier image but keeps a later one
+                        setHeroImages(newImages.filter(Boolean))
+                      }}
+                      onRemove={() => {
+                        const newImages = [...heroImages]
+                        newImages.splice(index, 1)
+                        setHeroImages(newImages)
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="heroHeadline">Hero Headline (EN)</Label>

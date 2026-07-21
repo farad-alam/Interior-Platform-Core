@@ -30,7 +30,11 @@ async function main() {
     heroHeadlineAr: 'خبراء صيانة وتركيب وفك مطابخ الألمنيوم في الرياض',
     heroSubheadline: 'Professional dismantling, installation & maintenance of aluminum kitchens across all Riyadh neighborhoods. Fast, reliable, and guaranteed quality.',
     heroSubheadlineAr: 'خدمات احترافية في فك وتركيب وصيانة مطابخ الألمنيوم في جميع أحياء الرياض. سرعة في التنفيذ وجودة مضمونة.',
-    heroImage: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2070&auto=format&fit=crop',
+    heroImages: [
+      'https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2070&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?q=80&w=2070&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1556912167-f556f1f39fdf?q=80&w=2081&auto=format&fit=crop'
+    ],
     workingHours: 'Sat–Thu: 7:00 AM – 10:00 PM',
     workingHoursAr: 'السبت – الخميس: ٧:٠٠ ص – ١٠:٠٠ م',
     serviceAreas: 'All Riyadh Neighborhoods including Al Olaya, Al Malaz, Al Nakheel, Al Rawdah, and surrounding areas',

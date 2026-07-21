@@ -43,7 +43,7 @@ model SiteSettings {
   heroHeadlineAr    String?
   heroSubheadline   String?
   heroSubheadlineAr String?
-  heroImage         String? // Cloudinary URL
+  heroImages        String[] // Cloudinary URLs
   
   // Contact & Footer Config
   workingHours      String?
