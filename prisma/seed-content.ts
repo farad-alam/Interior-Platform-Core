@@ -37,6 +37,11 @@ async function main() {
     serviceAreasAr: 'جميع أحياء الرياض بما فيها العليا، الملز، النخيل، الروضة، والمناطق المجاورة',
     footerTagline: 'Your trusted partner for aluminum kitchen solutions in Riyadh.',
     footerTaglineAr: 'شريكك الموثوق لحلول مطابخ الألمنيوم في الرياض.',
+    snapchat: 'https://snapchat.com',
+    tiktok: 'https://tiktok.com',
+    instagram: 'https://instagram.com',
+    twitter: 'https://twitter.com',
+    mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115933.27209355609!2d46.749021200000006!3d24.75704175!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2efbdef7f2a41f%3A0xf6a4ee60002e1715!2sRiyadh%20Saudi%20Arabia!5e0!3m2!1sen!2sus!4v1714496191244!5m2!1sen!2sus',
   }
 
   if (existingSettings) {

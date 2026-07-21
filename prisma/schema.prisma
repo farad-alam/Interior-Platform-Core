@@ -36,6 +36,7 @@ model SiteSettings {
   linkedin          String?
   youtube           String?
   tiktok            String?
+  snapchat          String?
   
   // Hero Section Config
   heroHeadline      String?
