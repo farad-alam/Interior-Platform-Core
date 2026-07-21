@@ -42,7 +42,7 @@ export function ClientGallery({ items, isAr }: { items: any[], isAr: boolean }) 
         })}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredItems.map(item => {
           if (item.beforeImageUrl) {
             return (
@@ -63,7 +63,7 @@ export function ClientGallery({ items, isAr }: { items: any[], isAr: boolean }) 
           return (
             <div
               key={item.id}
-              className="group relative aspect-[4/5] overflow-hidden rounded-2xl"
+              className="group relative aspect-video overflow-hidden rounded-2xl"
               style={{ background: '#EDE8DD' }}
             >
               <Image

@@ -18,7 +18,7 @@ export function BeforeAfterSlider({ beforeImage, afterImage, title, titleAr, cap
   const [sliderPos, setSliderPos] = useState(50)
 
   return (
-    <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-[#EDE8DD]">
+    <div className="group relative aspect-video overflow-hidden rounded-2xl bg-[#EDE8DD]">
       {/* Before Image (underneath, shows on the left) */}
       <Image
         src={beforeImage}
