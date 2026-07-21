@@ -35,7 +35,7 @@ export function HeroSlider({ images }: { images: string[] }) {
           style={{
             opacity: index === currentIndex ? 1 : 0,
             transition: 'opacity 1.5s ease-in-out',
-            zIndex: index === currentIndex ? 1 : 0
+            zIndex: index === currentIndex ? 0 : -1
           }}
         />
       ))}
