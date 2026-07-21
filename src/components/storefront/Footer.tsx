@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { prisma } from '@/core/db/client'
 import { getLanguage } from '@/core/actions/language.actions'
-import { Phone, MapPin, Clock, MessageCircle, ArrowRight, Instagram, Twitter, Ghost, AudioLines } from 'lucide-react'
+import { Phone, MapPin, Clock, MessageCircle, ArrowRight, Instagram } from 'lucide-react'
 
 // Custom SVGs for Snapchat and TikTok if Lucide doesn't have them
 function SnapchatIcon(props: any) {
@@ -16,6 +16,14 @@ function TikTokIcon(props: any) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+    </svg>
+  )
+}
+
+function XIcon(props: any) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M4 4l16 16M4 20L20 4" />
     </svg>
   )
 }
@@ -138,7 +146,7 @@ export async function Footer() {
               )}
               {settings?.twitter && (
                 <a href={settings.twitter} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:-translate-y-1" style={{ background: 'rgba(245,240,232,0.05)', color: '#D4B896' }}>
-                  <Twitter className="h-5 w-5" />
+                  <XIcon className="h-5 w-5" />
                 </a>
               )}
             </div>
