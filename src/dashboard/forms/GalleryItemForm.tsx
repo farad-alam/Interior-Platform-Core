@@ -17,6 +17,7 @@ export function GalleryItemForm({ initialData }: { initialData?: any }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState<string | null>(initialData?.imageUrl || null)
+  const [beforeImageUrl, setBeforeImageUrl] = useState<string | null>(initialData?.beforeImageUrl || null)
   
   const [formData, setFormData] = useState({
     title: initialData?.title ?? '',
@@ -33,10 +34,10 @@ export function GalleryItemForm({ initialData }: { initialData?: any }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!imageUrl) return toast.error('Please upload an image')
+    if (!imageUrl) return toast.error('Please upload an After image')
     setLoading(true)
     
-    const data = { ...formData, imageUrl }
+    const data = { ...formData, imageUrl, beforeImageUrl }
     
     try {
       if (initialData?.id) {
@@ -56,23 +57,44 @@ export function GalleryItemForm({ initialData }: { initialData?: any }) {
       <Card>
         <CardHeader><CardTitle>Gallery Details</CardTitle></CardHeader>
         <CardContent className="space-y-6">
-          <div className="space-y-4">
-            <Label>Image</Label>
-            {imageUrl ? (
-              <div className="relative w-full h-48 rounded-lg overflow-hidden border border-border">
-                <Image src={imageUrl} alt="Preview" fill className="object-cover" />
-                <div className="absolute top-2 right-2">
-                  <Button type="button" variant="destructive" size="icon" onClick={() => setImageUrl(null)}>
-                    <X className="h-4 w-4" />
-                  </Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <Label>Before Image (Optional)</Label>
+              {beforeImageUrl ? (
+                <div className="relative w-full h-48 rounded-lg overflow-hidden border border-border">
+                  <Image src={beforeImageUrl} alt="Before Preview" fill className="object-cover" />
+                  <div className="absolute top-2 right-2">
+                    <Button type="button" variant="destructive" size="icon" onClick={() => setBeforeImageUrl(null)}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <ImageUpload 
-                onUploadSuccess={(url) => setImageUrl(url)}
-                disabled={loading}
-              />
-            )}
+              ) : (
+                <ImageUpload 
+                  onUploadSuccess={(url) => setBeforeImageUrl(url)}
+                  disabled={loading}
+                />
+              )}
+            </div>
+
+            <div className="space-y-4">
+              <Label>After Image (Primary)</Label>
+              {imageUrl ? (
+                <div className="relative w-full h-48 rounded-lg overflow-hidden border border-border">
+                  <Image src={imageUrl} alt="After Preview" fill className="object-cover" />
+                  <div className="absolute top-2 right-2">
+                    <Button type="button" variant="destructive" size="icon" onClick={() => setImageUrl(null)}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <ImageUpload 
+                  onUploadSuccess={(url) => setImageUrl(url)}
+                  disabled={loading}
+                />
+              )}
+            </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

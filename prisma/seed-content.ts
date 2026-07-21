@@ -245,6 +245,7 @@ async function main() {
       title: 'Modern Minimalist Kitchen', titleAr: 'مطبخ عصري بسيط',
       caption: 'Complete aluminum kitchen installation with matte finish.', captionAr: 'تركيب مطبخ ألمنيوم بالكامل بتشطيب غير لامع.',
       imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop',
+      beforeImageUrl: 'https://images.unsplash.com/photo-1588854337236-6889d631faa8?q=80&w=2070&auto=format&fit=crop', // A messy/old kitchen image
       serviceType: 'INSTALLATION', status: 'PUBLISHED',
     },
     {
@@ -263,6 +264,7 @@ async function main() {
       title: 'Premium Surface Restoration', titleAr: 'ترميم الأسطح الفاخرة',
       caption: 'Restored aluminum counters and cabinets to look brand new.', captionAr: 'استعادة الأسطح والخزائن الألمنيوم لتبدو وكأنها جديدة.',
       imageUrl: 'https://images.unsplash.com/photo-1556912167-f556f1f39fdf?q=80&w=2081&auto=format&fit=crop',
+      beforeImageUrl: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop',
       serviceType: 'MAINTENANCE', status: 'PUBLISHED',
     },
   ]

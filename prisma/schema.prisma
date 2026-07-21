@@ -101,7 +101,8 @@ model Category {
 
 model GalleryItem {
   id          String        @id @default(cuid())
-  imageUrl    String        // Cloudinary URL
+  imageUrl       String        // Cloudinary URL (After Image)
+  beforeImageUrl String?       // Cloudinary URL (Before Image)
   title       String?
   titleAr     String?
   caption     String?
