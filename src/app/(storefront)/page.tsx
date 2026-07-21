@@ -55,8 +55,44 @@ export default async function StorefrontPage() {
       ? [(settings as any).heroImage] 
       : []
 
+  // Build Schema.org LocalBusiness JSON-LD
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: settings?.brandName || 'Interior Platform Core',
+    image: heroImages[0] || 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2070&auto=format&fit=crop',
+    '@id': process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'https://www.yourdomain.com',
+    url: process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'https://www.yourdomain.com',
+    telephone: settings?.phone || settings?.whatsapp || '',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: settings?.address || '',
+      addressLocality: 'Riyadh',
+      addressRegion: 'Riyadh Province',
+      addressCountry: 'SA'
+    },
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: [
+        'Saturday',
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday'
+      ],
+      opens: '07:00',
+      closes: '22:00'
+    }
+  }
+
   return (
     <div className="flex flex-col w-full" style={{ background: 'var(--sf-cream)' }}>
+      {/* JSON-LD Schema Markup for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
 
       {/* ══════════════════════════════════════════
           1. HERO — FULL BACKGROUND IMAGE
