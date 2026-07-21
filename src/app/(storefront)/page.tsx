@@ -116,37 +116,7 @@ export default async function StorefrontPage() {
 
         </div>
 
-        {/* Floating Stats Strip at the bottom of the hero */}
-        {stats.length > 0 && (
-          <div className="absolute bottom-0 left-0 right-0 z-20">
-            <div className="container mx-auto px-6 max-w-6xl translate-y-1/2">
-              <div
-                className="rounded-3xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6"
-                style={{ 
-                  background: 'rgba(245,240,232,0.95)', 
-                  backdropFilter: 'blur(16px)', 
-                  boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
-                  border: '1px solid rgba(212,184,150,0.3)'
-                }}
-              >
-                {stats.slice(0, 4).map(stat => (
-                  <div key={stat.id} className="text-center flex flex-col items-center">
-                    <div className="font-playfair font-bold text-3xl mb-1" style={{ color: 'var(--sf-green)' }}>
-                      {isAr ? (stat.valueAr || stat.value) : stat.value}
-                    </div>
-                    <div className="text-xs font-bold uppercase tracking-widest mt-1" style={{ color: 'var(--sf-brown)' }}>
-                      {isAr ? (stat.labelAr || stat.label) : stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
       </section>
-
-      {/* Spacer to account for the floating stats strip overlapping the next section */}
-      <div className="h-24 md:h-16" style={{ background: 'var(--sf-cream)' }} />
 
       {/* ══════════════════════════════════════════
           2. TRUST FEATURES — Floating card strip
