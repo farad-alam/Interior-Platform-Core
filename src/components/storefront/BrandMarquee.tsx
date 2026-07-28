@@ -55,7 +55,7 @@ export function BrandMarquee({ brands, isAr }: BrandMarqueeProps) {
           {loopedBrands.map((brand, idx) => (
             <div 
               key={`${brand.id}-${idx}`} 
-              className="relative w-[140px] md:w-[180px] h-[70px] md:h-[90px] shrink-0 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-500 hover:scale-105 cursor-pointer"
+              className="relative w-[140px] md:w-[180px] h-[70px] md:h-[90px] shrink-0 hover:scale-105 transition-all duration-500 cursor-pointer rounded-2xl overflow-hidden"
             >
               {brand.url ? (
                 <a href={brand.url} target="_blank" rel="noopener noreferrer" className="block w-full h-full relative">
@@ -63,7 +63,7 @@ export function BrandMarquee({ brands, isAr }: BrandMarqueeProps) {
                     src={brand.imageUrl}
                     alt={brand.name}
                     fill
-                    className="object-contain"
+                    className="object-contain rounded-2xl"
                   />
                 </a>
               ) : (
@@ -71,7 +71,7 @@ export function BrandMarquee({ brands, isAr }: BrandMarqueeProps) {
                   src={brand.imageUrl}
                   alt={brand.name}
                   fill
-                  className="object-contain"
+                  className="object-contain rounded-2xl"
                 />
               )}
             </div>
