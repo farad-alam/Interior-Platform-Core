@@ -1,125 +1,92 @@
 'use client'
 
-import { useRef } from 'react'
 import Image from 'next/image'
-import { motion, useScroll, useTransform } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { ArrowRight } from 'lucide-react'
 
 interface AboutSectionProps {
   isAr?: boolean
 }
 
 export function AboutSection({ isAr }: AboutSectionProps) {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  })
-
-  // Image-level parallax (the images slide inside their containers)
-  const mainImageY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"])
-  const secondaryImageY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"])
-  
-  // Text block parallax (slides up slightly as you scroll down)
-  const textY = useTransform(scrollYProgress, [0, 1], [50, -50])
-
   return (
-    <section 
-      ref={sectionRef} 
-      className="relative min-h-screen w-full flex items-center py-24 bg-[#0a0f0d] overflow-hidden border-t border-white/5"
-    >
-      <div className="container mx-auto px-6 relative z-10 max-w-7xl">
-        <div className={cn("grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center", isAr ? "rtl" : "ltr")}>
+    <section className="py-32 relative" style={{ background: 'var(--sf-cream)' }}>
+      {/* 
+        We add extra bottom padding (py-32 instead of py-24) to account for the Stats strip 
+        which will overlap the bottom of this section using a negative top margin. 
+      */}
+      <div className="container mx-auto px-6 max-w-7xl relative z-10">
+        
+        <div className={cn("flex flex-col lg:flex-row items-stretch", isAr ? "lg:flex-row-reverse" : "")}>
           
-          {/* Main Architectural Image - Spans 5 cols */}
-          <div className="lg:col-span-5 relative h-[500px] lg:h-[800px] w-full overflow-hidden group border border-white/10">
-            {/* Dark elegant border overlay */}
-            <div className="absolute inset-0 z-20 pointer-events-none transition-colors duration-500 group-hover:border-white/30 border border-transparent" />
-            
-            <motion.div 
-              style={{ y: mainImageY }}
-              className="absolute inset-0 h-[120%] w-full -top-[10%]"
-            >
-              <Image
-                src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80"
-                alt="Modern Interior Architecture"
-                fill
-                className="object-cover opacity-80"
-              />
-              {/* Subtle gradient overlay for mood */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f0d] via-transparent to-transparent opacity-80" />
-            </motion.div>
-          </div>
-
-          {/* Typography & Content - Spans 7 cols */}
-          <motion.div 
-            style={{ y: textY }}
-            className={cn("lg:col-span-7 flex flex-col justify-center relative z-30", isAr ? "lg:pr-16 text-right" : "lg:pl-16 text-left")}
+          {/* Solid Color Card - Overlaps the image on Desktop */}
+          <div 
+            className={cn(
+              "w-full lg:w-[45%] p-10 md:p-16 rounded-2xl relative z-20 shadow-2xl flex flex-col justify-center",
+              // We use negative margins to make the card overlap the image
+              isAr ? "lg:-ml-16 lg:mr-0 mt-8 lg:mt-12" : "lg:-mr-16 lg:ml-0 mb-8 lg:mb-12"
+            )}
+            style={{ background: 'var(--sf-brown)', color: '#fff' }}
           >
-            {/* Label */}
-            <div className={cn("flex items-center gap-4 mb-8", isAr ? "flex-row-reverse" : "")}>
-              <span className="w-12 h-[1px] bg-[#D4B896]/60" />
-              <span className="text-[#D4B896] font-semibold tracking-[0.2em] text-xs uppercase">
-                {isAr ? 'عن الشركة' : 'The Studio'}
-              </span>
-            </div>
+            <span 
+              className="text-xs font-bold tracking-[0.2em] uppercase mb-4 block" 
+              style={{ color: 'rgba(255,255,255,0.7)' }}
+            >
+              {isAr ? 'عن الشركة' : 'MORE ABOUT US'}
+            </span>
             
-            {/* Statement Quote */}
-            <h2 className="text-3xl md:text-5xl lg:text-5xl font-playfair font-bold text-white mb-10 leading-[1.25] max-w-2xl drop-shadow-xl">
+            <h2 className="text-3xl md:text-4xl lg:text-[2.5rem] font-bold mb-8 leading-[1.15]">
               {isAr 
-                ? 'نحن لا نصمم مجرد مساحات، بل نصنع '
-                : 'We don’t just design spaces, we craft '
+                ? '١٠ سنوات من الجودة والمشاريع الناجحة'
+                : '10 years of quality and successful projects'
               }
-              <span className="text-sf-green italic font-light drop-shadow-lg">
-                {isAr ? 'تجارب استثنائية' : 'exceptional experiences'}
-              </span>
-              {isAr ? ' تعكس جوهرك.' : ' that reflect your essence.'}
             </h2>
             
-            {/* Body Text */}
-            <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-8 mb-12", isAr ? "text-right" : "text-left")}>
-              <p className="text-white/60 text-base md:text-lg leading-relaxed font-light">
+            <div className="space-y-6 mb-10 text-sm md:text-base font-light" style={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.8 }}>
+               <p>
                 {isAr 
                   ? 'منذ تأسيسنا، التزمنا بإعادة تعريف مفهوم الفخامة العملية. نجمع بين الحرفية الدقيقة والجماليات العصرية لنقدم تصاميم داخلية ومطابخ ألمنيوم ترتقي بأسلوب حياتك.'
                   : 'Since our founding, we have been committed to redefining practical luxury. We merge meticulous craftsmanship with modern aesthetics to deliver interior designs and aluminum kitchens that elevate your lifestyle.'
                 }
               </p>
-              <p className="text-white/60 text-base md:text-lg leading-relaxed font-light">
+              <p>
                 {isAr
-                  ? 'كل مشروع هو رحلة تعاونية فريدة. يدرس فريقنا من المهندسين المعماريين والمصممين أدق التفاصيل لضمان أن كل زاوية تنبض بالحياة، والجودة تتحدث عن نفسها.'
-                  : 'Every project is a unique collaborative journey. Our team of architects and designers considers the finest details to ensure every corner breathes life, and quality speaks for itself.'
+                  ? 'كل مشروع هو رحلة تعاونية فريدة. يدرس فريقنا أدق التفاصيل لضمان أن كل زاوية تنبض بالحياة، والجودة تتحدث عن نفسها، دون الحاجة إلى تكاليف باهظة أو هدر للوقت.'
+                  : 'Every project is a unique collaborative journey. Our team considers the finest details to ensure every corner breathes life, and quality speaks for itself, without requiring immense cost or time.'
                 }
               </p>
             </div>
-
-            {/* CTA */}
+            
             <div>
               <a 
                 href="#contact" 
-                className={cn("inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white text-sm font-semibold tracking-widest uppercase transition-all duration-300 hover:bg-white hover:text-black", isAr ? "flex-row-reverse" : "")}
+                className={cn(
+                  "inline-flex items-center gap-2 font-semibold transition-opacity hover:opacity-80",
+                  isAr ? "flex-row-reverse" : ""
+                )} 
+                // We use a bright green for the CTA text to contrast with the brown
+                style={{ color: '#4ade80' }}
               >
-                {isAr ? 'استكشف رؤيتنا' : 'Explore Our Vision'}
+                {isAr ? 'اقرأ المزيد' : 'Read More'}
+                <ArrowRight className={cn("h-5 w-5", isAr ? "rotate-180" : "")} />
               </a>
             </div>
+          </div>
 
-            {/* Secondary Overlapping Image */}
-            <div className={cn("absolute hidden lg:block w-[280px] h-[350px] -bottom-32 z-40 overflow-hidden border border-white/10", isAr ? "-left-10" : "-right-10")}>
-              <motion.div 
-                style={{ y: secondaryImageY }}
-                className="absolute inset-0 h-[130%] w-full -top-[15%]"
-              >
-                <Image
-                  src="https://images.unsplash.com/photo-1556910103-1c02745a872f?auto=format&fit=crop&q=80"
-                  alt="Design Details"
-                  fill
-                  className="object-cover opacity-90"
-                />
-              </motion.div>
-            </div>
-          </motion.div>
+          {/* Main Architectural Image */}
+          <div className="w-full lg:w-[65%] h-[400px] lg:h-[700px] relative rounded-2xl overflow-hidden shadow-lg z-10 lg:my-auto">
+            <Image
+              src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80"
+              alt="Interior Design"
+              fill
+              className="object-cover"
+            />
+            {/* Subtle overlay to enhance image depth */}
+            <div className="absolute inset-0 bg-black/10" />
+          </div>
 
         </div>
+        
       </div>
     </section>
   )

@@ -385,18 +385,24 @@ export default async function StorefrontPage() {
           4. STATS STRIP (dark green)
       ══════════════════════════════════════════ */}
       {stats.length > 0 && (
-        <section className="py-20 px-6" style={{ background: 'var(--sf-green)' }}>
-          <div className="container mx-auto max-w-5xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <section className="px-6 relative z-30 -mt-24 mb-24 pointer-events-none">
+          <div className="container mx-auto max-w-5xl pointer-events-auto">
+            <div 
+              className="rounded-2xl grid grid-cols-2 md:grid-cols-4 shadow-2xl overflow-hidden divide-y md:divide-y-0 md:divide-x divide-white/10"
+              style={{ background: '#1c1c1c' }}
+            >
               {stats.map(stat => (
-                <div key={stat.id}>
+                <div key={stat.id} className="py-10 px-6 flex flex-col items-center justify-center text-center">
                   <div
-                    className="font-playfair font-bold mb-1"
-                    style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#F5F0E8' }}
+                    className="font-playfair font-bold mb-2"
+                    style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#fff', lineHeight: 1 }}
                   >
                     {isAr ? (stat.valueAr || stat.value) : stat.value}
                   </div>
-                  <div className="text-sm font-medium" style={{ color: 'rgba(245,240,232,0.7)' }}>
+                  <div 
+                    className="text-[10px] sm:text-xs font-bold tracking-[0.15em] uppercase" 
+                    style={{ color: 'var(--sf-brown)' }}
+                  >
                     {isAr ? (stat.labelAr || stat.label) : stat.label}
                   </div>
                 </div>
