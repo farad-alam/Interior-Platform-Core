@@ -23,22 +23,23 @@ export function HeroSlider({ images }: { images: string[] }) {
   }, [validImages.length])
 
   return (
-    <>
-      {validImages.map((src, index) => (
-        <Image
-          key={src + index}
-          src={src}
-          alt={`Aluminum Kitchen Hero ${index + 1}`}
-          fill
-          className="object-cover"
-          priority={index === 0} // Only prioritize the first image for LCP
-          style={{
-            opacity: index === currentIndex ? 1 : 0,
-            transition: 'opacity 1.5s ease-in-out',
-            zIndex: index === currentIndex ? 0 : -1
-          }}
-        />
-      ))}
-    </>
+    <div className="absolute inset-0 overflow-hidden z-0">
+      <div 
+        className="flex h-full w-full transition-transform duration-1000 ease-in-out"
+        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+      >
+        {validImages.map((src, index) => (
+          <div key={src + index} className="relative min-w-full h-full">
+            <Image
+              src={src}
+              alt={`Aluminum Kitchen Hero ${index + 1}`}
+              fill
+              className="object-cover"
+              priority={index === 0}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
