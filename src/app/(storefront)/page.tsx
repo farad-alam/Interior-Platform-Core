@@ -8,6 +8,7 @@ import * as LucideIcons from 'lucide-react'
 import { ClientGallery } from '@/components/storefront/ClientGallery'
 import { VideoReels } from '@/components/storefront/VideoReels'
 import { BrandMarquee } from '@/components/storefront/BrandMarquee'
+import { AboutSection } from '@/components/storefront/AboutSection'
 
 import { HeroSlider } from '@/components/storefront/HeroSlider'
 
@@ -160,6 +161,11 @@ export default async function StorefrontPage() {
         </div>
 
       </section>
+
+      {/* ══════════════════════════════════════════
+          ABOUT US SECTION
+      ══════════════════════════════════════════ */}
+      <AboutSection isAr={isAr} />
 
       {/* ══════════════════════════════════════════
           BRANDS MARQUEE
