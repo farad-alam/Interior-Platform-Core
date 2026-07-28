@@ -22,7 +22,8 @@ import {
   ImagePlus,
   Layers,
   LogOut,
-  Sparkles
+  Sparkles,
+  PlaySquare
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -34,6 +35,7 @@ const items = [
   { title: 'Trust Features', url: '/dashboard/trust-features', icon: Sparkles },
   { title: 'Stats Counter', url: '/dashboard/stats', icon: Layers },
   { title: 'Gallery', url: '/dashboard/gallery', icon: ImageIcon },
+  { title: 'Videos', url: '/dashboard/videos', icon: PlaySquare },
   { title: 'Testimonials', url: '/dashboard/testimonials', icon: MessageSquare },
   { title: 'FAQs', url: '/dashboard/faqs', icon: HelpCircle },
   { title: 'Categories', url: '/dashboard/categories', icon: Layers },

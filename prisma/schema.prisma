@@ -203,3 +203,27 @@ model BlogPost {
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
 }
+
+model VideoReel {
+  id           String        @id @default(cuid())
+  title        String
+  titleAr      String?
+  caption      String?
+  captionAr    String?
+  youtubeUrl   String
+  videoId      String
+  category     VideoCategory @default(OTHER)
+  order        Int           @default(0)
+  featured     Boolean       @default(false)
+  status       ContentStatus @default(DRAFT)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+enum VideoCategory {
+  WORKING
+  COMPLETED
+  TRANSFORMATION
+  INSTALLATION
+  OTHER
+}

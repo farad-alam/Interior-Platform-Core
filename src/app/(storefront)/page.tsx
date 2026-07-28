@@ -6,6 +6,7 @@ import { getSiteSettings } from '@/core/services/settings.service'
 import { MessageCircle, MapPin, ChevronDown, Star, ArrowRight, Phone } from 'lucide-react'
 import * as LucideIcons from 'lucide-react'
 import { ClientGallery } from '@/components/storefront/ClientGallery'
+import { VideoReels } from '@/components/storefront/VideoReels'
 
 import { HeroSlider } from '@/components/storefront/HeroSlider'
 
@@ -20,13 +21,14 @@ export default async function StorefrontPage() {
   const lang = await getLanguage()
   const settings = await getSiteSettings()
 
-  const [services, trustFeatures, stats, faqs, testimonials, galleryItems] = await Promise.all([
+  const [services, trustFeatures, stats, faqs, testimonials, galleryItems, videoReels] = await Promise.all([
     prisma.service.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } }),
     prisma.trustFeature.findMany({ orderBy: { order: 'asc' } }),
     prisma.statCounter.findMany({ orderBy: { order: 'asc' } }),
     prisma.fAQ.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } }),
     prisma.testimonial.findMany({ where: { status: 'PUBLISHED', featured: true }, orderBy: { createdAt: 'desc' } }),
     prisma.galleryItem.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'desc' } }),
+    prisma.videoReel.findMany({ where: { status: 'PUBLISHED' }, orderBy: [{ order: 'asc' }, { createdAt: 'desc' }] }),
   ])
 
   const isAr = lang === 'ar'
@@ -353,6 +355,14 @@ export default async function StorefrontPage() {
         </section>
       )}
 
+      {/* ══════════════════════════════════════════
+          4.5. VIDEO REELS
+      ══════════════════════════════════════════ */}
+      <VideoReels 
+        videos={videoReels} 
+        isAr={isAr} 
+        title={isAr ? 'أعمالنا في الميدان' : 'Our Work in Action'} 
+      />
       {/* ══════════════════════════════════════════
           5. STATS STRIP (dark green)
       ══════════════════════════════════════════ */}
