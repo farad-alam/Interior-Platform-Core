@@ -136,7 +136,7 @@ export default async function StorefrontPage() {
           </p>
 
           {/* CTA Buttons */}
-          <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 ${isAr ? 'sm:flex-row-reverse' : ''}`}>
+          <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 mb-32 ${isAr ? 'sm:flex-row-reverse' : ''}`}>
             {wpClean && (
               <a
                 href={`https://wa.me/${wpClean}?text=${encodeURIComponent(isAr ? 'مرحباً، أود الاستفسار عن خدمات المطابخ' : 'Hello, I want to inquire about kitchen services')}`}
@@ -166,7 +166,7 @@ export default async function StorefrontPage() {
           2. TRUST FEATURES — Floating card strip
       ══════════════════════════════════════════ */}
       {trustFeatures.length > 0 && (
-        <section className="px-6 relative z-20 -mt-24 pb-12" style={{ background: 'transparent' }}>
+        <section className="px-6 relative z-20 -mt-16 pb-12" style={{ background: 'transparent' }}>
           <div className="container mx-auto max-w-6xl">
             <div
               className="rounded-3xl p-8 md:p-10 grid grid-cols-2 md:grid-cols-4 gap-6"
