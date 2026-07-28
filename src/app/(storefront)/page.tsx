@@ -211,29 +211,37 @@ export default async function StorefrontPage() {
       )}
 
       {/* ══════════════════════════════════════════
-          4. STATS STRIP (dark green)
+          4. PORTFOLIO GALLERY
       ══════════════════════════════════════════ */}
-      {stats.length > 0 && (
-        <section className="py-20 px-6" style={{ background: 'var(--sf-green)' }}>
-          <div className="container mx-auto max-w-5xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {stats.map(stat => (
-                <div key={stat.id}>
-                  <div
-                    className="font-playfair font-bold mb-1"
-                    style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#F5F0E8' }}
-                  >
-                    {isAr ? (stat.valueAr || stat.value) : stat.value}
-                  </div>
-                  <div className="text-sm font-medium" style={{ color: 'rgba(245,240,232,0.7)' }}>
-                    {isAr ? (stat.labelAr || stat.label) : stat.label}
-                  </div>
-                </div>
-              ))}
+      {galleryItems.length > 0 && (
+        <section id="gallery" className="py-24 px-6" style={{ background: '#fff' }}>
+          <div className="container mx-auto max-w-7xl">
+            <div className={`flex items-start justify-between mb-14 flex-wrap gap-4 ${isAr ? 'flex-row-reverse' : ''}`}>
+              <div>
+                <span className="sf-label block mb-3" style={{ color: 'var(--sf-brown)' }}>
+                  {isAr ? 'معرض الأعمال' : 'Portfolio'}
+                </span>
+                <h2
+                  className="font-playfair font-bold"
+                  style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: 'var(--sf-charcoal)', lineHeight: 1.2 }}
+                >
+                  {isAr ? 'أعمالنا المنجزة' : 'Our Completed Work'}
+                </h2>
+              </div>
             </div>
+            <ClientGallery items={galleryItems} isAr={isAr} />
           </div>
         </section>
       )}
+
+      {/* ══════════════════════════════════════════
+          4.5. VIDEO REELS
+      ══════════════════════════════════════════ */}
+      <VideoReels 
+        videos={videoReels} 
+        isAr={isAr} 
+        title={isAr ? 'أعمالنا في الميدان' : 'Our Work in Action'} 
+      />
 
       {/* ══════════════════════════════════════════
           5. SERVICES
@@ -367,42 +375,34 @@ export default async function StorefrontPage() {
       </section>
 
       {/* ══════════════════════════════════════════
-          4. PORTFOLIO GALLERY
-      ══════════════════════════════════════════ */}
-      {galleryItems.length > 0 && (
-        <section id="gallery" className="py-24 px-6" style={{ background: '#fff' }}>
-          <div className="container mx-auto max-w-7xl">
-            <div className={`flex items-start justify-between mb-14 flex-wrap gap-4 ${isAr ? 'flex-row-reverse' : ''}`}>
-              <div>
-                <span className="sf-label block mb-3" style={{ color: 'var(--sf-brown)' }}>
-                  {isAr ? 'معرض الأعمال' : 'Portfolio'}
-                </span>
-                <h2
-                  className="font-playfair font-bold"
-                  style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: 'var(--sf-charcoal)', lineHeight: 1.2 }}
-                >
-                  {isAr ? 'أعمالنا المنجزة' : 'Our Completed Work'}
-                </h2>
-              </div>
-            </div>
-            <ClientGallery items={galleryItems} isAr={isAr} />
-          </div>
-        </section>
-      )}
-
-      {/* ══════════════════════════════════════════
-          4.5. VIDEO REELS
-      ══════════════════════════════════════════ */}
-      <VideoReels 
-        videos={videoReels} 
-        isAr={isAr} 
-        title={isAr ? 'أعمالنا في الميدان' : 'Our Work in Action'} 
-      />
-
-      {/* ══════════════════════════════════════════
           ABOUT US SECTION
       ══════════════════════════════════════════ */}
       <AboutSection isAr={isAr} />
+
+      {/* ══════════════════════════════════════════
+          4. STATS STRIP (dark green)
+      ══════════════════════════════════════════ */}
+      {stats.length > 0 && (
+        <section className="py-20 px-6" style={{ background: 'var(--sf-green)' }}>
+          <div className="container mx-auto max-w-5xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              {stats.map(stat => (
+                <div key={stat.id}>
+                  <div
+                    className="font-playfair font-bold mb-1"
+                    style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#F5F0E8' }}
+                  >
+                    {isAr ? (stat.valueAr || stat.value) : stat.value}
+                  </div>
+                  <div className="text-sm font-medium" style={{ color: 'rgba(245,240,232,0.7)' }}>
+                    {isAr ? (stat.labelAr || stat.label) : stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ══════════════════════════════════════════
           9. TESTIMONIALS
