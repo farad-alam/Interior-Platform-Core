@@ -211,7 +211,32 @@ export default async function StorefrontPage() {
       )}
 
       {/* ══════════════════════════════════════════
-          3. SERVICES
+          4. STATS STRIP (dark green)
+      ══════════════════════════════════════════ */}
+      {stats.length > 0 && (
+        <section className="py-20 px-6" style={{ background: 'var(--sf-green)' }}>
+          <div className="container mx-auto max-w-5xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              {stats.map(stat => (
+                <div key={stat.id}>
+                  <div
+                    className="font-playfair font-bold mb-1"
+                    style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#F5F0E8' }}
+                  >
+                    {isAr ? (stat.valueAr || stat.value) : stat.value}
+                  </div>
+                  <div className="text-sm font-medium" style={{ color: 'rgba(245,240,232,0.7)' }}>
+                    {isAr ? (stat.labelAr || stat.label) : stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ══════════════════════════════════════════
+          5. SERVICES
       ══════════════════════════════════════════ */}
       <section id="services" className="py-24 px-6" style={{ background: 'var(--sf-cream)' }}>
         <div className="container mx-auto max-w-6xl">
@@ -380,32 +405,7 @@ export default async function StorefrontPage() {
       <AboutSection isAr={isAr} />
 
       {/* ══════════════════════════════════════════
-          5. STATS STRIP (dark green)
-      ══════════════════════════════════════════ */}
-      {stats.length > 0 && (
-        <section className="py-20 px-6" style={{ background: 'var(--sf-green)' }}>
-          <div className="container mx-auto max-w-5xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {stats.map(stat => (
-                <div key={stat.id}>
-                  <div
-                    className="font-playfair font-bold mb-1"
-                    style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#F5F0E8' }}
-                  >
-                    {isAr ? (stat.valueAr || stat.value) : stat.value}
-                  </div>
-                  <div className="text-sm font-medium" style={{ color: 'rgba(245,240,232,0.7)' }}>
-                    {isAr ? (stat.labelAr || stat.label) : stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ══════════════════════════════════════════
-          6. TESTIMONIALS
+          9. TESTIMONIALS
       ══════════════════════════════════════════ */}
       {testimonials.length > 0 && (
         <section className="py-24 px-6" style={{ background: 'var(--sf-cream-dark)' }}>
