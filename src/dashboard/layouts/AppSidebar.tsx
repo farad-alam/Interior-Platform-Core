@@ -36,6 +36,7 @@ const items = [
   { title: 'Stats Counter', url: '/dashboard/stats', icon: Layers },
   { title: 'Gallery', url: '/dashboard/gallery', icon: ImageIcon },
   { title: 'Videos', url: '/dashboard/videos', icon: PlaySquare },
+  { title: 'Brands', url: '/dashboard/brands', icon: Briefcase },
   { title: 'Testimonials', url: '/dashboard/testimonials', icon: MessageSquare },
   { title: 'FAQs', url: '/dashboard/faqs', icon: HelpCircle },
   { title: 'Categories', url: '/dashboard/categories', icon: Layers },

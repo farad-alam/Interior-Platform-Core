@@ -7,6 +7,7 @@ import { MessageCircle, MapPin, ChevronDown, Star, ArrowRight, Phone } from 'luc
 import * as LucideIcons from 'lucide-react'
 import { ClientGallery } from '@/components/storefront/ClientGallery'
 import { VideoReels } from '@/components/storefront/VideoReels'
+import { BrandMarquee } from '@/components/storefront/BrandMarquee'
 
 import { HeroSlider } from '@/components/storefront/HeroSlider'
 
@@ -21,7 +22,7 @@ export default async function StorefrontPage() {
   const lang = await getLanguage()
   const settings = await getSiteSettings()
 
-  const [services, trustFeatures, stats, faqs, testimonials, galleryItems, videoReels] = await Promise.all([
+  const [services, trustFeatures, stats, faqs, testimonials, galleryItems, videoReels, brandLogos] = await Promise.all([
     prisma.service.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } }),
     prisma.trustFeature.findMany({ orderBy: { order: 'asc' } }),
     prisma.statCounter.findMany({ orderBy: { order: 'asc' } }),
@@ -29,6 +30,7 @@ export default async function StorefrontPage() {
     prisma.testimonial.findMany({ where: { status: 'PUBLISHED', featured: true }, orderBy: { createdAt: 'desc' } }),
     prisma.galleryItem.findMany({ where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'desc' } }),
     prisma.videoReel.findMany({ where: { status: 'PUBLISHED' }, orderBy: [{ order: 'asc' }, { createdAt: 'desc' }] }),
+    prisma.brandLogo.findMany({ where: { status: 'PUBLISHED' }, orderBy: [{ order: 'asc' }, { createdAt: 'desc' }] }),
   ])
 
   const isAr = lang === 'ar'
@@ -158,6 +160,13 @@ export default async function StorefrontPage() {
         </div>
 
       </section>
+
+      {/* ══════════════════════════════════════════
+          BRANDS MARQUEE
+      ══════════════════════════════════════════ */}
+      {brandLogos && brandLogos.length > 0 && (
+        <BrandMarquee brands={brandLogos} isAr={isAr} />
+      )}
 
       {/* ══════════════════════════════════════════
           2. TRUST FEATURES — Floating card strip
