@@ -17,109 +17,107 @@ export function AboutSection({ isAr }: AboutSectionProps) {
     offset: ["start end", "end start"]
   })
 
-  // Parallax transforms
-  // Background blobs
-  const yBlob1 = useTransform(scrollYProgress, [0, 1], [0, 300])
-  const yBlob2 = useTransform(scrollYProgress, [0, 1], [100, -200])
+  // Image-level parallax (the images slide inside their containers)
+  const mainImageY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"])
+  const secondaryImageY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"])
   
-  // Image composition
-  const yMainImage = useTransform(scrollYProgress, [0, 1], [50, -50])
-  const ySecondaryImage = useTransform(scrollYProgress, [0, 1], [-30, 80])
-  const rotateSecondaryImage = useTransform(scrollYProgress, [0, 1], [-5, 5])
+  // Text block parallax (slides up slightly as you scroll down)
+  const textY = useTransform(scrollYProgress, [0, 1], [50, -50])
 
   return (
     <section 
       ref={sectionRef} 
-      className="relative min-h-screen w-full flex items-center py-24 overflow-hidden bg-[#F5F0E8]"
+      className="relative min-h-screen w-full flex items-center py-24 bg-[#0a0f0d] overflow-hidden border-t border-white/5"
     >
-      {/* Parallax Background Blobs */}
-      <motion.div 
-        style={{ y: yBlob1 }}
-        className="absolute top-[-10%] left-[-5%] w-[40vw] h-[40vw] rounded-full bg-sf-green/5 blur-[120px] pointer-events-none"
-      />
-      <motion.div 
-        style={{ y: yBlob2 }}
-        className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#8C7A6B]/10 blur-[140px] pointer-events-none"
-      />
-
-      <div className="container mx-auto px-6 relative z-10">
-        <div className={cn("grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 items-center", isAr ? "rtl" : "ltr")}>
+      <div className="container mx-auto px-6 relative z-10 max-w-7xl">
+        <div className={cn("grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center", isAr ? "rtl" : "ltr")}>
           
-          {/* Text Content */}
-          <div className={cn("flex flex-col", isAr ? "text-right" : "text-left")}>
-            <div className={cn("flex items-center gap-3 mb-6", isAr ? "flex-row-reverse" : "")}>
-              <span className="w-10 h-[1px] bg-sf-green" />
-              <span className="text-sf-green font-bold tracking-widest text-xs uppercase">
-                {isAr ? 'من نحن' : 'About Us'}
+          {/* Main Architectural Image - Spans 5 cols */}
+          <div className="lg:col-span-5 relative h-[500px] lg:h-[800px] w-full overflow-hidden group border border-white/10">
+            {/* Dark elegant border overlay */}
+            <div className="absolute inset-0 z-20 pointer-events-none transition-colors duration-500 group-hover:border-white/30 border border-transparent" />
+            
+            <motion.div 
+              style={{ y: mainImageY }}
+              className="absolute inset-0 h-[120%] w-full -top-[10%]"
+            >
+              <Image
+                src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80"
+                alt="Modern Interior Architecture"
+                fill
+                className="object-cover opacity-80"
+              />
+              {/* Subtle gradient overlay for mood */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f0d] via-transparent to-transparent opacity-80" />
+            </motion.div>
+          </div>
+
+          {/* Typography & Content - Spans 7 cols */}
+          <motion.div 
+            style={{ y: textY }}
+            className={cn("lg:col-span-7 flex flex-col justify-center relative z-30", isAr ? "lg:pr-16 text-right" : "lg:pl-16 text-left")}
+          >
+            {/* Label */}
+            <div className={cn("flex items-center gap-4 mb-8", isAr ? "flex-row-reverse" : "")}>
+              <span className="w-12 h-[1px] bg-[#D4B896]/60" />
+              <span className="text-[#D4B896] font-semibold tracking-[0.2em] text-xs uppercase">
+                {isAr ? 'عن الشركة' : 'The Studio'}
               </span>
             </div>
             
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-sf-charcoal mb-8 leading-[1.15]">
-              {isAr ? 'نصمم مساحات' : 'Crafting Spaces'}<br />
-              <em className="text-sf-tan italic">{isAr ? 'تلهمك' : 'that Inspire'}</em>
+            {/* Statement Quote */}
+            <h2 className="text-3xl md:text-5xl lg:text-5xl font-playfair font-bold text-white mb-10 leading-[1.25] max-w-2xl drop-shadow-xl">
+              {isAr 
+                ? 'نحن لا نصمم مجرد مساحات، بل نصنع '
+                : 'We don’t just design spaces, we craft '
+              }
+              <span className="text-sf-green italic font-light drop-shadow-lg">
+                {isAr ? 'تجارب استثنائية' : 'exceptional experiences'}
+              </span>
+              {isAr ? ' تعكس جوهرك.' : ' that reflect your essence.'}
             </h2>
             
-            <p className="text-sf-warm-gray text-lg md:text-xl leading-relaxed mb-6 max-w-xl">
-              {isAr 
-                ? 'نحن نؤمن بأن المساحات التي نعيش ونعمل فيها تشكل هويتنا وحياتنا. منذ انطلاقتنا، كرسنا جهودنا لتقديم تصاميم داخلية ومطابخ ألمنيوم تجمع بين الأناقة المطلقة والأداء العملي.'
-                : 'We believe that the spaces we inhabit shape our lives. Since our inception, we have been dedicated to delivering interior designs and aluminum kitchens that perfectly balance absolute elegance with practical functionality.'
-              }
-            </p>
-            <p className="text-sf-warm-gray text-lg md:text-xl leading-relaxed mb-10 max-w-xl">
-              {isAr
-                ? 'فريقنا من الخبراء يعمل بشغف لتحويل رؤيتك إلى واقع ملموس، مع الاهتمام بأدق التفاصيل والالتزام بأعلى معايير الجودة في كل خطوة.'
-                : 'Our team of experts works passionately to turn your vision into reality, paying attention to the finest details and adhering to the highest quality standards at every step.'
-              }
-            </p>
+            {/* Body Text */}
+            <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-8 mb-12", isAr ? "text-right" : "text-left")}>
+              <p className="text-white/60 text-base md:text-lg leading-relaxed font-light">
+                {isAr 
+                  ? 'منذ تأسيسنا، التزمنا بإعادة تعريف مفهوم الفخامة العملية. نجمع بين الحرفية الدقيقة والجماليات العصرية لنقدم تصاميم داخلية ومطابخ ألمنيوم ترتقي بأسلوب حياتك.'
+                  : 'Since our founding, we have been committed to redefining practical luxury. We merge meticulous craftsmanship with modern aesthetics to deliver interior designs and aluminum kitchens that elevate your lifestyle.'
+                }
+              </p>
+              <p className="text-white/60 text-base md:text-lg leading-relaxed font-light">
+                {isAr
+                  ? 'كل مشروع هو رحلة تعاونية فريدة. يدرس فريقنا من المهندسين المعماريين والمصممين أدق التفاصيل لضمان أن كل زاوية تنبض بالحياة، والجودة تتحدث عن نفسها.'
+                  : 'Every project is a unique collaborative journey. Our team of architects and designers considers the finest details to ensure every corner breathes life, and quality speaks for itself.'
+                }
+              </p>
+            </div>
 
+            {/* CTA */}
             <div>
               <a 
                 href="#contact" 
-                className={cn("inline-flex items-center gap-2 pb-1 border-b-2 border-sf-green text-sf-charcoal font-bold uppercase tracking-wider text-sm transition-all hover:text-sf-green", isAr ? "flex-row-reverse" : "")}
+                className={cn("inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white text-sm font-semibold tracking-widest uppercase transition-all duration-300 hover:bg-white hover:text-black", isAr ? "flex-row-reverse" : "")}
               >
-                {isAr ? 'اكتشف المزيد' : 'Discover More'}
+                {isAr ? 'استكشف رؤيتنا' : 'Explore Our Vision'}
               </a>
             </div>
-          </div>
 
-          {/* Image Composition */}
-          <div className="relative h-[500px] lg:h-[700px] w-full flex items-center justify-center">
-            
-            {/* Main Image (Organic Blob Shape) */}
-            <motion.div 
-              style={{ y: yMainImage }}
-              className={cn("absolute w-[80%] h-[80%] top-[10%] z-10 drop-shadow-2xl", isAr ? "right-0" : "left-0")}
-            >
-              <div 
-                className="w-full h-full relative"
-                style={{ 
-                  // Organic SVG clip-path
-                  clipPath: 'polygon(10% 0, 95% 5%, 100% 85%, 85% 100%, 0 90%, 5% 15%)' 
-                }}
+            {/* Secondary Overlapping Image */}
+            <div className={cn("absolute hidden lg:block w-[280px] h-[350px] -bottom-32 z-40 overflow-hidden border border-white/10", isAr ? "-left-10" : "-right-10")}>
+              <motion.div 
+                style={{ y: secondaryImageY }}
+                className="absolute inset-0 h-[130%] w-full -top-[15%]"
               >
                 <Image
-                  src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80"
-                  alt="Modern Interior"
+                  src="https://images.unsplash.com/photo-1556910103-1c02745a872f?auto=format&fit=crop&q=80"
+                  alt="Design Details"
                   fill
-                  className="object-cover"
+                  className="object-cover opacity-90"
                 />
-              </div>
-            </motion.div>
-
-            {/* Secondary Image (Circle overlapping) */}
-            <motion.div 
-              style={{ y: ySecondaryImage, rotate: rotateSecondaryImage }}
-              className={cn("absolute w-[45%] h-[45%] bottom-[5%] z-20 drop-shadow-xl border-[8px] border-[#F5F0E8] rounded-[30%] overflow-hidden", isAr ? "left-0" : "right-0")}
-            >
-              <Image
-                src="https://images.unsplash.com/photo-1556910103-1c02745a872f?auto=format&fit=crop&q=80"
-                alt="Aluminum Kitchen Detail"
-                fill
-                className="object-cover"
-              />
-            </motion.div>
-
-          </div>
+              </motion.div>
+            </div>
+          </motion.div>
 
         </div>
       </div>

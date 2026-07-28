@@ -163,11 +163,6 @@ export default async function StorefrontPage() {
       </section>
 
       {/* ══════════════════════════════════════════
-          ABOUT US SECTION
-      ══════════════════════════════════════════ */}
-      <AboutSection isAr={isAr} />
-
-      {/* ══════════════════════════════════════════
           BRANDS MARQUEE
       ══════════════════════════════════════════ */}
       {brandLogos && brandLogos.length > 0 && (
@@ -378,6 +373,12 @@ export default async function StorefrontPage() {
         isAr={isAr} 
         title={isAr ? 'أعمالنا في الميدان' : 'Our Work in Action'} 
       />
+
+      {/* ══════════════════════════════════════════
+          ABOUT US SECTION
+      ══════════════════════════════════════════ */}
+      <AboutSection isAr={isAr} />
+
       {/* ══════════════════════════════════════════
           5. STATS STRIP (dark green)
       ══════════════════════════════════════════ */}
