@@ -18,7 +18,7 @@ export function BrandMarquee({ brands, isAr }: BrandMarqueeProps) {
   const baseVelocity = isAr ? 1 : -1
 
   useAnimationFrame((t, delta) => {
-    let moveBy = baseVelocity * (delta / 1000) * 50 // Adjust speed by changing 50
+    let moveBy = baseVelocity * (delta / 1000) * 20 // Adjust speed by changing 20
     baseX.set(baseX.get() + moveBy)
   })
 
