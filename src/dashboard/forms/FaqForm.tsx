@@ -19,7 +19,7 @@ export function FaqForm({ initialData }: { initialData?: any }) {
     questionAr: initialData?.questionAr ?? '',
     answer: initialData?.answer ?? '',
     answerAr: initialData?.answerAr ?? '',
-    status: initialData?.status ?? ''
+    status: initialData?.status ?? 'PUBLISHED'
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

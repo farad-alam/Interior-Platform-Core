@@ -34,7 +34,7 @@ export function ProjectForm({ initialData, categories }: ProjectFormProps) {
     slug: initialData?.slug ?? '',
     description: initialData?.description ?? '',
     categoryId: initialData?.categoryId ?? '',
-    status: initialData?.status ?? 'DRAFT',
+    status: initialData?.status ?? 'PUBLISHED',
     featured: initialData?.featured ?? false,
   })
 
@@ -134,7 +134,7 @@ export function ProjectForm({ initialData, categories }: ProjectFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
-              <Select value={formData.status} onValueChange={(val) => setFormData({...formData, status: (val as any) || 'DRAFT'})}>
+              <Select value={formData.status} onValueChange={(val) => setFormData({...formData, status: (val as any) || 'PUBLISHED'})}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>

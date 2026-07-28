@@ -36,7 +36,7 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
     icon: initialData?.icon ?? '',
     whatsappMessage: initialData?.whatsappMessage ?? '',
     whatsappMessageAr: initialData?.whatsappMessageAr ?? '',
-    status: initialData?.status ?? 'DRAFT',
+    status: initialData?.status ?? 'PUBLISHED',
   })
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -176,7 +176,7 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
-              <Select value={formData.status} onValueChange={(val) => setFormData({...formData, status: (val as any) || 'DRAFT'})}>
+              <Select value={formData.status} onValueChange={(val) => setFormData({...formData, status: (val as any) || 'PUBLISHED'})}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>

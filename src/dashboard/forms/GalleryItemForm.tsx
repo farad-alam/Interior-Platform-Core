@@ -25,7 +25,7 @@ export function GalleryItemForm({ initialData }: { initialData?: any }) {
     caption: initialData?.caption ?? '',
     captionAr: initialData?.captionAr ?? '',
     serviceType: initialData?.serviceType ?? '',
-    status: initialData?.status ?? 'DRAFT',
+    status: initialData?.status ?? 'PUBLISHED',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

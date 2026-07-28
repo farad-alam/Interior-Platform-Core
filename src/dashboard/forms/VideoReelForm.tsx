@@ -134,7 +134,7 @@ export function VideoReelForm({ initialData }: { initialData?: any }) {
             {/* Status & Featured */}
             <div className="space-y-2">
               <Label>Status</Label>
-              <Select name="status" defaultValue={initialData?.status || 'DRAFT'}>
+              <Select name="status" defaultValue={initialData?.status || 'PUBLISHED'}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="DRAFT">Draft</SelectItem>

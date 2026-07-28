@@ -22,7 +22,7 @@ export function TestimonialForm({ initialData }: { initialData?: any }) {
     content: initialData?.content ?? '',
     contentAr: initialData?.contentAr ?? '',
     rating: initialData?.rating ?? 0,
-    status: initialData?.status ?? ''
+    status: initialData?.status ?? 'PUBLISHED'
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
